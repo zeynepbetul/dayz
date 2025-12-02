@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createHomeNavigationController() -> UINavigationController {
         let homeVC = HomeVC()
         homeVC.title = "Home"
-        homeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 0)
+        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
         
         return UINavigationController(rootViewController: homeVC)
     }
@@ -35,7 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createCalendarNavigationController() -> UINavigationController {
         let calendarVC = CalendarVC()
         calendarVC.title = "DayZ"
-        calendarVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
+        calendarVC.tabBarItem = UITabBarItem(title: "DayZ", image: UIImage(systemName: "calendar"), tag: 1)
         
         return UINavigationController(rootViewController: calendarVC)
     }
@@ -43,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createProfileNavigationController() -> UINavigationController {
         let profileVC = ProfileVC()
         profileVC.title = "Profile"
-        profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
+        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 2)
         
         return UINavigationController(rootViewController: profileVC)
     }
