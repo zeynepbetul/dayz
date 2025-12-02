@@ -18,17 +18,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let homeNavigationController = UINavigationController(rootViewController: HomeVC())
-        let calendarNavigationController = UINavigationController(rootViewController: CalendarVC())
-        let profileNavigationController = UINavigationController(rootViewController: ProfileVC())
-        
-        let tabbar = UITabBarController()
-        tabbar.viewControllers = [homeNavigationController, calendarNavigationController, profileNavigationController]
-        
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = tabbar
+        window?.rootViewController = createTabbar()
         window?.makeKeyAndVisible()
+    }
+    
+    func createHomeNavigationController() -> UINavigationController {
+        let homeVC = HomeVC()
+        homeVC.title = "Home"
+        homeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 0)
+        
+        return UINavigationController(rootViewController: homeVC)
+    }
+    
+    func createCalendarNavigationController() -> UINavigationController {
+        let calendarVC = CalendarVC()
+        calendarVC.title = "DayZ"
+        calendarVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
+        
+        return UINavigationController(rootViewController: calendarVC)
+    }
+    
+    func createProfileNavigationController() -> UINavigationController {
+        let profileVC = ProfileVC()
+        profileVC.title = "Profile"
+        profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
+        
+        return UINavigationController(rootViewController: profileVC)
+    }
+    
+    func createTabbar() -> UITabBarController{
+        let tabbar = UITabBarController()
+        UITabBar.appearance().tintColor = .systemGray6
+        tabbar.viewControllers = [createHomeNavigationController(), createCalendarNavigationController(), createProfileNavigationController()]
+        
+        return tabbar
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
