@@ -11,7 +11,7 @@ class HomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemPink
+        view.backgroundColor = .systemBackground
         
         navigationController?.navigationBar.tintColor = .black
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchTapped))
@@ -19,7 +19,8 @@ class HomeVC: UIViewController {
     }
     
     @objc func searchTapped() {
-        
+        let searchVC = SearchVC()
+        navigationController?.pushViewController(searchVC, animated: true) // Push the SearchVC on top of the navigation stack.
     }
     
     @objc func notificationsTapped() {
