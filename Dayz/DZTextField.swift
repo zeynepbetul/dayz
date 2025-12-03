@@ -19,7 +19,7 @@ class DZTextField: UITextField {
     }
     
     init(placeholder: String) {
-        super.init(frame: .zero)
+        super.init(frame: .zero)  // Most of the time, super is called when overriding something. When we don’t need the parent’s features, it is not called.
         self.placeholder = placeholder
         configure()
     }
