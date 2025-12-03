@@ -10,6 +10,7 @@ import UIKit
 class SearchVC: UIViewController {
     
     let usernameTextField = DZTextField(placeholder: "Search")
+    var tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,5 +39,13 @@ class SearchVC: UIViewController {
             usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             usernameTextField.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    func configureTableView() {
+        view.addSubview(tableView)
+        // TODO: set delegates
+        // TODO: set row height
+        // TODO: register cells
+        // TODO: set constraints
     }
 }
