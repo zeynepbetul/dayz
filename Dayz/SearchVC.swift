@@ -17,6 +17,7 @@ class SearchVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         configureTextField()
+        configureTableView()
         createDismissKeyboardTapGesture()
     }
     
@@ -43,10 +44,19 @@ class SearchVC: UIViewController {
     
     func configureTableView() {
         view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
         setTableViewDelegates()
-        // TODO: set row height
+        tableView.rowHeight = 50
+        
         // TODO: register cells
-        // TODO: set constraints
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     func setTableViewDelegates() {
