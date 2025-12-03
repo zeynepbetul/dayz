@@ -43,9 +43,25 @@ class SearchVC: UIViewController {
     
     func configureTableView() {
         view.addSubview(tableView)
-        // TODO: set delegates
+        setTableViewDelegates()
         // TODO: set row height
         // TODO: register cells
         // TODO: set constraints
+    }
+    
+    func setTableViewDelegates() {
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+}
+
+extension SearchVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return UITableViewCell()
     }
 }
