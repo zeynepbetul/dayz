@@ -24,19 +24,19 @@ class SearchVC: UIViewController {
             view.addGestureRecognizer(recognizer)
         }
         
-        @objc func searchTapped() {
-            let searchVC = SearchVC()
-            navigationController?.pushViewController(searchVC, animated: true) // Push the SearchVC on top of the navigation stack.
-        }
+    @objc func searchTapped() {
+        let searchVC = SearchVC()
+        navigationController?.pushViewController(searchVC, animated: true) // Push the SearchVC on top of the navigation stack.
+    }
+    
+    func configureTextField() {
+        view.addSubview(usernameTextField)
         
-        func configureTextField() {
-            view.addSubview(usernameTextField)
-            
-            NSLayoutConstraint.activate([
-                usernameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-                usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-                usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-                usernameTextField.heightAnchor.constraint(equalToConstant: 50)
-            ])
-        }
+        NSLayoutConstraint.activate([
+            usernameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
 }
