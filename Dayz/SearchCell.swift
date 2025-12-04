@@ -10,14 +10,13 @@ import UIKit
 class SearchCell: UITableViewCell {
     
     var avatarImageView = DZAvatarImageView(frame: .zero)
-    var userNameLabel   = UILabel()
+    var userNameLabel   = DZTitleLabel(textAlignment: .left, fontSize: 12)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(avatarImageView)
         addSubview(userNameLabel)
-        
-        configureTitleLabel()
+
         setImageConstraints()
         setUserNameLabelConstraints()
     }
@@ -29,11 +28,6 @@ class SearchCell: UITableViewCell {
     func set(dzuser: DZUser) {
         avatarImageView = dzuser.avatarImage
         userNameLabel.text = dzuser.userName
-    }
-    
-    func configureTitleLabel() {
-        userNameLabel.numberOfLines = 0 // it is not going to pass new line
-        userNameLabel.adjustsFontSizeToFitWidth = true
     }
     
     func setImageConstraints() {
