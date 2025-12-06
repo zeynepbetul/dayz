@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		C9EB382B2EE498080005DDF8 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB382A2EE498080005DDF8 /* UIViewController+Ext.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		C91599842EDEFE3700E38D1C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -31,7 +27,6 @@
 		C915996D2EDEFE3000E38D1C /* Dayz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dayz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91599832EDEFE3700E38D1C /* DayzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DayzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C915998D2EDEFE3700E38D1C /* DayzUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DayzUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9EB382A2EE498080005DDF8 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -93,7 +88,6 @@
 		C91599642EDEFE3000E38D1C = {
 			isa = PBXGroup;
 			children = (
-				C9EB38302EE4C2870005DDF8 /* Extensions */,
 				C915996F2EDEFE3000E38D1C /* Dayz */,
 				C91599862EDEFE3700E38D1C /* DayzTests */,
 				C91599902EDEFE3700E38D1C /* DayzUITests */,
@@ -109,14 +103,6 @@
 				C915998D2EDEFE3700E38D1C /* DayzUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		C9EB38302EE4C2870005DDF8 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				C9EB382A2EE498080005DDF8 /* UIViewController+Ext.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,7 +249,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9EB382B2EE498080005DDF8 /* UIViewController+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
