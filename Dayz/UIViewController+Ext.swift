@@ -1,0 +1,8 @@
+//
+//  UIViewController+Ext.swift
+//  Dayz
+//
+//  Created by Zeynep Betül Kaya on 6.12.2025.
+//
+
+import Foundation
