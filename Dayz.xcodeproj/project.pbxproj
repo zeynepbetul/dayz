@@ -14,6 +14,7 @@
 		C9409A5B2EE6317000A8BF86 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = C9409A5A2EE6317000A8BF86 /* FirebaseFirestoreCombine-Community */; };
 		C9409A5D2EE6317000A8BF86 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C9409A5C2EE6317000A8BF86 /* FirebaseStorage */; };
 		C9409A5F2EE6317000A8BF86 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = C9409A5E2EE6317000A8BF86 /* FirebaseStorageCombine-Community */; };
+		C9409AA12EE706E400A8BF86 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C9409AA02EE706DE00A8BF86 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		C915996D2EDEFE3000E38D1C /* Dayz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dayz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91599832EDEFE3700E38D1C /* DayzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DayzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C915998D2EDEFE3700E38D1C /* DayzUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DayzUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9409AA02EE706DE00A8BF86 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -105,6 +107,7 @@
 		C91599642EDEFE3000E38D1C = {
 			isa = PBXGroup;
 			children = (
+				C9409AA02EE706DE00A8BF86 /* .gitignore */,
 				C915996F2EDEFE3000E38D1C /* Dayz */,
 				C91599862EDEFE3700E38D1C /* DayzTests */,
 				C91599902EDEFE3700E38D1C /* DayzUITests */,
@@ -252,6 +255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9409AA12EE706E400A8BF86 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

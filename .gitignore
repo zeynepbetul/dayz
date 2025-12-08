@@ -1,0 +1,9 @@
+//
+//  .gitignore
+//  Dayz
+//
+//  Created by Zeynep Betül Kaya on 8.12.2025.
+//
+
+# Firebase Secrets
+Dayz/GoogleService-Info.plist
