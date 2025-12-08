@@ -11,8 +11,6 @@
 
 ## Technologies and Concepts Used
 
-This project showcases hands-on experience with core iOS concepts:
-
 - **UIKit (Programmatic UI)**
 - **MVC Pattern**
 - **Firebase**: Authentication, Cloud Firestore.
