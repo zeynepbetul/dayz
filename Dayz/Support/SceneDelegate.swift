@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -22,6 +23,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.rootViewController = createTabbar()
         window?.makeKeyAndVisible()
+    }
+    
+    func determineInitialViewController() -> UIViewController {
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "seenOnboarding")
+        let currentUser = Auth.auth().currentUser
+        
+        if !hasSeenOnboarding {
+            return OnboardingVC()
+        }
+        if currentUser == nil {
+            return UINavigationController(rootViewController: SignInVC())
+        }
+        return createTabbar()
     }
     
     func createHomeNavigationController() -> UINavigationController {
