@@ -92,7 +92,8 @@ class SignInVC: UIViewController {
     }
 
     @objc func signUpTapped() {
-        
+        let signUpVC = SignUpVC()
+        navigationController?.pushViewController(signUpVC, animated: true)
     }
     
     @objc func loginTapped() {
