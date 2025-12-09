@@ -43,8 +43,8 @@ class SignInVC: UIViewController {
         emailTitleLabel.text                    = "Email"
         passwordTitleLabel.text                 = "Password"
         forgetPasswordTitleLabel.text           = "Forget Password?"
-        dontHaveAccountSubTitleLabel.text       = "Don’t have an account? Sign Up"
         orWithSubTitleLabel.text                = "Or with"
+        configureAttributedString()
         
         loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googleTapped), for: .touchUpInside)
@@ -71,6 +71,19 @@ class SignInVC: UIViewController {
             appleButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    
+    func configureAttributedString() {
+        let fullText = "Don't have an account? Sign Up"
+        let attributed = NSMutableAttributedString(string: fullText, attributes: [.font: dontHaveAccountSubTitleLabel.font!, .foregroundColor: dontHaveAccountSubTitleLabel.textColor!])
+        
+        if let signUpRange = fullText.range(of: "Sign Up") {
+            let nsRange = NSRange(signUpRange, in: fullText)
+            attributed.addAttributes([.font: UIFont.boldSystemFont(ofSize: dontHaveAccountSubTitleLabel.font.pointSize), .foregroundColor: UIColor.label], range: nsRange)
+        }
+        dontHaveAccountSubTitleLabel.attributedText = attributed
+    }
+
+    
     @objc func loginTapped() {
         
     }
