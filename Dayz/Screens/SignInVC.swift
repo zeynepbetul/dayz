@@ -12,10 +12,10 @@ class SignInVC: UIViewController {
     let viewTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 26)
     let viewSubTitleLabel = DZBodyLabel(textAlignment: .left)
     
-    let emailPlaceHolder = DZTextField(placeholder: "Your email")
+    let emailTextField = DZTextField(placeholder: "Your email")
     let emailTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
     
-    let passwordPlaceHolder = DZTextField(placeholder: "Password")
+    let passwordTextField = DZTextField(placeholder: "Password")
     let passwordTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
     
     let forgetPasswordTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
@@ -46,7 +46,7 @@ class SignInVC: UIViewController {
         orWithSubTitleLabel.text                = "Or with"
         
         
-        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, emailTitleLabel, emailPlaceHolder, passwordTitleLabel, passwordPlaceHolder, forgetPasswordTitleLabel, loginButton, dontHaveAccountSubTitleLabel, orWithSubTitleLabel, googleButton, appleButton])
+        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, forgetPasswordTitleLabel, loginButton, dontHaveAccountSubTitleLabel, orWithSubTitleLabel, googleButton, appleButton])
         
         stack.axis                              = .vertical
         stack.spacing                           = 16
