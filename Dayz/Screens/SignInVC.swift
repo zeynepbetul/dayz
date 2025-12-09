@@ -23,6 +23,8 @@ class SignInVC: UIViewController {
     let loginButton = DZButton(backgroundColor: .black, title: "Login")
     
     let dontHaveAccountSubTitleLabel = DZBodyLabel(textAlignment: .center)
+    let signUpButton = UIButton(type: .system)
+    let dontHaveAccountStack = UIStackView()
     
     let orWithSubTitleLabel = DZBodyLabel(textAlignment: .center)
     
@@ -43,14 +45,16 @@ class SignInVC: UIViewController {
         emailTitleLabel.text                    = "Email"
         passwordTitleLabel.text                 = "Password"
         forgetPasswordTitleLabel.text           = "Forget Password?"
+        dontHaveAccountSubTitleLabel.text       = "Don't have an account?"
         orWithSubTitleLabel.text                = "Or with"
-        configureAttributedString()
         
+        signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googleTapped), for: .touchUpInside)
         appleButton.addTarget(self, action: #selector(appleTapped), for: .touchUpInside)
         
-        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, forgetPasswordTitleLabel, loginButton, dontHaveAccountSubTitleLabel, orWithSubTitleLabel, googleButton, appleButton])
+        configureDontHaveAccountStack()
+        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, forgetPasswordTitleLabel, loginButton, dontHaveAccountStack, orWithSubTitleLabel, googleButton, appleButton])
         
         stack.axis                              = .vertical
         stack.spacing                           = 16
@@ -72,17 +76,24 @@ class SignInVC: UIViewController {
         ])
     }
     
-    func configureAttributedString() {
-        let fullText = "Don't have an account? Sign Up"
-        let attributed = NSMutableAttributedString(string: fullText, attributes: [.font: dontHaveAccountSubTitleLabel.font!, .foregroundColor: dontHaveAccountSubTitleLabel.textColor!])
+    func configureDontHaveAccountStack() {
+        dontHaveAccountStack.addArrangedSubview(dontHaveAccountSubTitleLabel)
+        dontHaveAccountStack.addArrangedSubview(signUpButton)
         
-        if let signUpRange = fullText.range(of: "Sign Up") {
-            let nsRange = NSRange(signUpRange, in: fullText)
-            attributed.addAttributes([.font: UIFont.boldSystemFont(ofSize: dontHaveAccountSubTitleLabel.font.pointSize), .foregroundColor: UIColor.label], range: nsRange)
-        }
-        dontHaveAccountSubTitleLabel.attributedText = attributed
+        signUpButton.setTitle("Sign Up", for: .normal)
+        signUpButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        signUpButton.setTitleColor(.label, for: .normal)
+        signUpButton.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+
+        dontHaveAccountStack.axis             = .horizontal
+        dontHaveAccountStack.spacing          = 1
+        dontHaveAccountStack.alignment        = .center
+        dontHaveAccountStack.distribution     = .fillProportionally
     }
 
+    @objc func signUpTapped() {
+        
+    }
     
     @objc func loginTapped() {
         
