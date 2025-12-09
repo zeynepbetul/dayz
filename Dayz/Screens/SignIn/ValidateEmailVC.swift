@@ -8,9 +8,60 @@
 import UIKit
 
 class ValidateEmailVC: UIViewController {
+    let viewTitleLabel = DZTitleLabel(textAlignment: .center, fontSize: 26)
+    let viewSubTitleLabel = DZBodyLabel(textAlignment: .center)
+    let emailTitleLabel = DZTitleLabel(textAlignment: .center, fontSize: 16)
+    
+    let receiveCodeSubTitleLabel = DZBodyLabel(textAlignment: .center)
+    let resendButton = UIButton(type: .system)
+    let resendStack = UIStackView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        configureComponents()
     }
+    
+    func configureComponents() {
+        viewTitleLabel.text                     = "Verification Email"
+        viewSubTitleLabel.text                  = "We sent a verification email to your inbox"
+        emailTitleLabel.text                    = "Johndoe@gmail.com"
+        receiveCodeSubTitleLabel.text           = "If you didn’t receive an email"
+        
+        configureStack()
+        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, emailTitleLabel, resendStack])
+        
+        stack.axis                              = .vertical
+        stack.spacing                           = 16
+               
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stack)
+        
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        ])
+    }
+    
+    func configureStack() {
+        resendStack.addArrangedSubview(receiveCodeSubTitleLabel)
+        resendStack.addArrangedSubview(resendButton)
+        
+        resendButton.setTitle("Resend", for: .normal)
+        resendButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        resendButton.setTitleColor(.label, for: .normal)
+        resendButton.addTarget(self, action: #selector(resendTapped), for: .touchUpInside)
+
+        resendStack.axis             = .horizontal
+        resendStack.spacing          = 1
+        resendStack.alignment        = .center
+        resendStack.distribution     = .fillProportionally
+    }
+    
+    @objc func resendTapped() {
+
+    }
+
 }
