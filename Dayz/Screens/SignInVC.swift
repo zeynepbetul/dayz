@@ -45,6 +45,9 @@ class SignInVC: UIViewController {
         dontHaveAccountSubTitleLabel.text       = "Don’t have an account? Sign Up"
         orWithSubTitleLabel.text                = "Or with"
         
+        loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(googleTapped), for: .touchUpInside)
+        appleButton.addTarget(self, action: #selector(appleTapped), for: .touchUpInside)
         
         let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, forgetPasswordTitleLabel, loginButton, dontHaveAccountSubTitleLabel, orWithSubTitleLabel, googleButton, appleButton])
         
@@ -66,5 +69,16 @@ class SignInVC: UIViewController {
             googleButton.heightAnchor.constraint(equalToConstant: 50),
             appleButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    @objc func loginTapped() {
+        
+    }
+    
+    @objc func googleTapped() {
+        
+    }
+    
+    @objc func appleTapped() {
+        
     }
 }
