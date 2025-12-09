@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SignUpVC: UIViewController {
     let viewTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 26)
@@ -42,7 +43,7 @@ class SignUpVC: UIViewController {
         passwordTitleLabel.text                 = "Password"
         haveAccountSubTitleLabel.text           = "Have an account?"
         
-        signInButton.addTarget(self, action: #selector(registerTapped), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(registerTapped), for: .touchUpInside)
         
         configureHaveAccountStack()
         let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, nameTitleLabel, nameTextField, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, registerButton, haveAccountStack])
@@ -86,7 +87,38 @@ class SignUpVC: UIViewController {
     }
     
     @objc func registerTapped() {
+        let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" // 4. Nil-coalescing
+        let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
+        if let errorMessage = validateFields(email: email, password: password) {
+            // TODO: show error
+            print(errorMessage)
+            return
+        }
+
+        Auth.auth().createUser(withEmail: email, password: password) { authdata, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            print("User created:", authdata?.user.uid ?? "")
+        }
+    }
+
+    func validateFields(email: String, password: String) -> String? {
+        if email.isEmpty || password.isEmpty {
+            return "Please fill in all fields."
+        }
+        
+        if !email.contains("@") || !email.contains(".") {
+            return "Please enter a valid email."
+        }
+
+        if password.count < 6 {
+            return "Password must be at least 6 characters."
+        }
+
+        return nil
     }
     
     
