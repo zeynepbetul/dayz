@@ -34,6 +34,7 @@ class SignInVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         configureComponents()
+        createDismissKeyboardTapGesture()
     }
     
     func configureComponents() {
@@ -81,4 +82,8 @@ class SignInVC: UIViewController {
     @objc func appleTapped() {
         
     }
+    func createDismissKeyboardTapGesture() {
+            let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+            view.addGestureRecognizer(recognizer)
+        }
 }
