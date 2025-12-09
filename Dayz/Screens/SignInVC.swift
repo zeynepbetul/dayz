@@ -95,8 +95,9 @@ class SignInVC: UIViewController {
     @objc func appleTapped() {
         
     }
+    
     func createDismissKeyboardTapGesture() {
-            let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
-            view.addGestureRecognizer(recognizer)
-        }
+        let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(recognizer)
+    }
 }
