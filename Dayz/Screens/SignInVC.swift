@@ -59,6 +59,9 @@ class SignInVC: UIViewController {
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
+            emailTextField.heightAnchor.constraint(equalToConstant: 44),
+            passwordTextField.heightAnchor.constraint(equalToConstant: 44),
+            
             loginButton.heightAnchor.constraint(equalToConstant: 50),
             googleButton.heightAnchor.constraint(equalToConstant: 50),
             appleButton.heightAnchor.constraint(equalToConstant: 50)
