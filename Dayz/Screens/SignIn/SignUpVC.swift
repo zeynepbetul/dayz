@@ -110,29 +110,29 @@ class SignUpVC: UIViewController {
                 }
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+                }
             }
         }
     }
-
-    func validateFields(email: String, password: String) -> String? {
-        if email.isEmpty || password.isEmpty {
-            return "Please fill in all fields."
+        func validateFields(email: String, password: String) -> String? {
+            if email.isEmpty || password.isEmpty {
+                return "Please fill in all fields."
+            }
+            
+            if !email.contains("@") || !email.contains(".") {
+                return "Please enter a valid email."
+            }
+            
+            if password.count < 6 {
+                return "Password must be at least 6 characters."
+            }
+            
+            return nil
         }
         
-        if !email.contains("@") || !email.contains(".") {
-            return "Please enter a valid email."
+        
+        func createDismissKeyboardTapGesture() {
+            let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+            view.addGestureRecognizer(recognizer)
         }
-
-        if password.count < 6 {
-            return "Password must be at least 6 characters."
-        }
-
-        return nil
     }
-    
-    
-    func createDismissKeyboardTapGesture() {
-        let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
-        view.addGestureRecognizer(recognizer)
-    }
-}
