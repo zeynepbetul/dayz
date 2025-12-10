@@ -44,7 +44,10 @@ class CongratsVC: UIViewController {
     }
     
     @objc func getStartedTapped() {
+        UserDefaults.standard.set(true, forKey: "seenOnboarding")
 
+        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+        sceneDelegate.window?.rootViewController = sceneDelegate.createTabbar()
     }
 
 }
