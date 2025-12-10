@@ -18,6 +18,7 @@ class ValidateEmailVC: UIViewController {
     let resendStack = UIStackView()
     
     var verificationTimer: Timer?
+    var email: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +62,7 @@ class ValidateEmailVC: UIViewController {
     func configureComponents() {
         viewTitleLabel.text                     = "Verification Email"
         viewSubTitleLabel.text                  = "We sent a verification email to your inbox"
-        emailTitleLabel.text                    = "Johndoe@gmail.com"
+        emailTitleLabel.text                    = email
         receiveCodeSubTitleLabel.text           = "If you didn’t receive an email"
         
         configureStack()
