@@ -109,9 +109,7 @@ class SignUpVC: UIViewController {
                     return
                 }
                 DispatchQueue.main.async {
-                    let vc = ValidateEmailVC()
-                    vc.email = email
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
                 }
             }
         }
