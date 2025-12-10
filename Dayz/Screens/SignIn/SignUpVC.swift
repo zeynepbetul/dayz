@@ -102,7 +102,10 @@ class SignUpVC: UIViewController {
                 return
             }
             print("User created:", authdata?.user.uid ?? "")
-            self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+            
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+            }
         }
     }
 
