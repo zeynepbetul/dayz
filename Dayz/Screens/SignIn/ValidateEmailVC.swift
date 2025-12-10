@@ -45,8 +45,9 @@ class ValidateEmailVC: UIViewController {
                 self.verificationTimer = nil
                 print("Email verified! Proceed to next screen")
                 DispatchQueue.main.async {
-                    // TODO: Navigate to main/home screen
-                    // self.navigationController?.pushViewController(HomeVC(), animated: true)
+                    let congratsVC = CongratsVC()
+                    congratsVC.modalPresentationStyle = .fullScreen
+                    self.present(congratsVC, animated: true, completion: nil)
                 }
             } else {
                 print("Email not verified yet")
