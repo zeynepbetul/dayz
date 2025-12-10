@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ValidateEmailVC: UIViewController {
     let viewTitleLabel = DZTitleLabel(textAlignment: .center, fontSize: 26)
@@ -15,12 +16,45 @@ class ValidateEmailVC: UIViewController {
     let receiveCodeSubTitleLabel = DZBodyLabel(textAlignment: .center)
     let resendButton = UIButton(type: .system)
     let resendStack = UIStackView()
+    
+    var verificationTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
         configureComponents()
+        startVerificationCheck()
+    }
+    
+    func startVerificationCheck() {
+        verificationTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(checkEmailVerification), userInfo: nil, repeats: true)
+    }
+    
+    @objc func checkEmailVerification() {
+        guard let user = Auth.auth().currentUser else { return }
+        
+        user.reload { error in
+            if let error = error {
+                print("Reload error:", error.localizedDescription)
+                return
+            }
+            
+            if user.isEmailVerified {
+                self.verificationTimer?.invalidate()
+                self.verificationTimer = nil
+                print("Email verified! Proceed to next screen")
+                DispatchQueue.main.async {
+                    // TODO: Navigate to main/home screen
+                    // self.navigationController?.pushViewController(HomeVC(), animated: true)
+                }
+            } else {
+                print("Email not verified yet")
+            }
+        }
+    }
+    deinit {
+        verificationTimer?.invalidate()
     }
     
     func configureComponents() {
