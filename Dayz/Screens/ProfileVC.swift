@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileVC: UIViewController {
 
@@ -32,7 +33,15 @@ class ProfileVC: UIViewController {
     }
     
     @objc func logout() {
-        presentDZAlertOnMainThread(title: "Sign out", message: "Do you want to sign out of your account?",
-                                   buttonTitle: "Sign Out", buttonTitleSec: "Cancel")
+        do {
+            try Auth.auth().signOut()
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let sceneDelegate = scene.delegate as? SceneDelegate {
+                sceneDelegate.window?.rootViewController = UINavigationController(rootViewController: SignInVC())
+                }
+            } catch {
+                print("Error signing out:", error)
+            }
+        //presentDZAlertOnMainThread(title: "Sign out", message: "Do you want to sign out of your account?", buttonTitle: "Sign Out", buttonTitleSec: "Cancel")
     }
 }
