@@ -103,20 +103,13 @@ class SignUpVC: UIViewController {
             }
             
             guard let user = authdata?.user else { return }
-            self.sendVerificationEmail(to: user)
-            
-            DispatchQueue.main.async {
-                self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
-            }
-        }
-    }
-    
-    func sendVerificationEmail(to user: User) {
-        user.sendEmailVerification { error in
-            if let error = error {
-                print("Verification email error:", error.localizedDescription)
-            } else {
-                print("Verification email sent to \(user.email ?? "")")
+            user.sendEmailVerification { error in
+                if let error = error {
+                    print("Verification email error:", error.localizedDescription)
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
             }
         }
     }
