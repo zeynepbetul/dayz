@@ -32,6 +32,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if !hasSeenOnboarding {
             return OnboardingVC()
         }
+        if let user = currentUser, user.isEmailVerified == false {
+            return UINavigationController(rootViewController: ValidateEmailVC())
+        }
         if currentUser == nil {
             return UINavigationController(rootViewController: SignInVC())
         }
