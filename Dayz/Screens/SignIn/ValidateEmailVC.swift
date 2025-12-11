@@ -96,7 +96,19 @@ class ValidateEmailVC: UIViewController {
     }
     
     @objc func resendTapped() {
-
+        guard let user = Auth.auth().currentUser else { return }
+        
+        user.sendEmailVerification { error in
+            if let error = error {
+                print("Resend error:", error.localizedDescription)
+                return
+            }
+            
+            print("Verification email re-sent!")
+            
+            DispatchQueue.main.async {
+                // TODO: resent alert
+            }
+        }
     }
-
 }
