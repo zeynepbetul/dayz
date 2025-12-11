@@ -69,7 +69,7 @@ class NetworkManager {
     }
     
     // MARK: - Check Username Availability
-    func checkUsernameExists(_ username: String, completion: @escaping (Bool) -> Void) {
+    func checkUsernameExists(_ username: String, completion: @escaping (ErrorMessage?) -> Void) {
         
         db.collection("publicUsers")
             .whereField("username", isEqualTo: username.lowercased())
@@ -77,14 +77,14 @@ class NetworkManager {
                 
                 if let error = error {
                     print("Username check error:", error)
-                    completion(true) // error -> return already exists
+                    completion(.networkError)
                     return
                 }
                 
                 if let documents = snapshot?.documents, !documents.isEmpty {
-                    completion(true)  // username already exists
+                    completion(.usernameTaken)  // username already exists
                 } else {
-                    completion(false) // username is available
+                    completion(nil) // username is available
                 }
             }
     }

@@ -98,9 +98,9 @@ class SignUpVC: UIViewController {
         }
         
         // Check if username exists
-        NetworkManager.shared.checkUsernameExists(username) { exists in
-            if exists {
-                print("This username is already taken.")
+        NetworkManager.shared.checkUsernameExists(username) { error in
+            if let error = error {
+                print(error)
                 return
             }
             
