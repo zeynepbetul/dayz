@@ -87,50 +87,59 @@ class SignUpVC: UIViewController {
     }
     
     @objc func registerTapped() {
+        let username = usernameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" // 4. Nil-coalescing
         let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
-        if let errorMessage = validateFields(email: email, password: password) {
+        if let errorMessage = validateFields(email: email, password: password, username: username) {
             // TODO: show error
             print(errorMessage)
             return
         }
-
-        Auth.auth().createUser(withEmail: email, password: password) { authdata, error in
-            if let error = error {
-                print(error.localizedDescription)
+        
+        // Check if username exists
+        NetworkManager.shared.checkUsernameExists(username) { exists in
+            if exists {
+                print("This username is already taken.")
                 return
             }
             
-            guard let user = authdata?.user else { return }
-            
-            let newUser = User(
-                id: user.uid,
-                username: self.usernameTextField.text ?? "",
-                email: email,
-                name: nil,
-                bio: nil,
-                avatarUrl: nil,
-                followers: 0,
-                following: 0,
-                createdAt: Date()
-            )
-            
-            // Save private data
-            NetworkManager.shared.createPrivateUser(newUser) { success in
-                if !success { return }
+            Auth.auth().createUser(withEmail: email, password: password) { authdata, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
                 
-                // Save public data
-                NetworkManager.shared.createPublicUser(newUser) { success in
-                    if success {
-                        print("User created successfully")
-                        user.sendEmailVerification { error in
-                            if let error = error {
-                                print("Verification email error:", error.localizedDescription)
-                                return
-                            }
-                            DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+                guard let user = authdata?.user else { return }
+                
+                let newUser = User(
+                    id: user.uid,
+                    username: username,
+                    email: email,
+                    name: nil,
+                    bio: nil,
+                    avatarUrl: nil,
+                    followers: 0,
+                    following: 0,
+                    createdAt: Date()
+                )
+                
+                // Save private data
+                NetworkManager.shared.createPrivateUser(newUser) { success in
+                    if !success { return }
+                    
+                    // Save public data
+                    NetworkManager.shared.createPublicUser(newUser) { success in
+                        if success {
+                            print("User created successfully")
+                            user.sendEmailVerification { error in
+                                if let error = error {
+                                    print("Verification email error:", error.localizedDescription)
+                                    return
+                                }
+                                DispatchQueue.main.async {
+                                    self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+                                }
                             }
                         }
                     }
@@ -138,7 +147,7 @@ class SignUpVC: UIViewController {
             }
         }
     }
-        func validateFields(email: String, password: String) -> String? {
+        func validateFields(email: String, password: String, username: String) -> String? {
             if email.isEmpty || password.isEmpty {
                 return "Please fill in all fields."
             }
@@ -151,6 +160,9 @@ class SignUpVC: UIViewController {
                 return "Password must be at least 6 characters."
             }
             
+            if username.count < 3 {
+                return "Username must be at least 3 characters."
+            }
             return nil
         }
         
