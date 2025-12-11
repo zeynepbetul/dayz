@@ -25,9 +25,20 @@ class SearchCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(dzuser: DZUser) {
-        avatarImageView = dzuser.avatarImage
-        userNameLabel.text = dzuser.userName
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // Reset image to placeholder to prevent showing old reused images.
+        // Without this, tableView reuses cells and the previous user's avatar
+        // may appear for a moment before the new one loads (flickering issue).
+        avatarImageView.image = avatarImageView.placeHolderImage
+    }
+    
+    func configure(with user: PublicUser) {
+        userNameLabel.text = user.username
+        
+        if let avatarUrl = user.avatarUrl {
+            avatarImageView.setImage(from: avatarUrl)
+        }
     }
     
     func setImageConstraints() {

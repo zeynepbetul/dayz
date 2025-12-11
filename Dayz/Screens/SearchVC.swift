@@ -11,7 +11,8 @@ class SearchVC: UIViewController {
     
     let usernameTextField = DZTextField(placeholder: "Search")
     var tableView = UITableView()
-    var users: [DZUser] = [] // The table view is just a list of things what are we showing.
+    var users: [PublicUser] = [] // The table view is just a list of things what are we showing.
+    var filteredUsers: [PublicUser] = []
     
     struct Cells {
         static let searchCell = "SearchCell"
@@ -20,12 +21,22 @@ class SearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
-        users = fetchData()
-        
+    
         configureTextField()
         configureTableView()
         createDismissKeyboardTapGesture()
+        
+        fetchUsersFromFirebase()
+    }
+    
+    func fetchUsersFromFirebase() {
+        NetworkManager.shared.fetchAllUsers { fetchedUsers in
+            DispatchQueue.main.async {
+                self.users = fetchedUsers
+                self.filteredUsers = fetchedUsers   // show all at the first openning
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func createDismissKeyboardTapGesture() {
@@ -38,8 +49,20 @@ class SearchVC: UIViewController {
         navigationController?.pushViewController(searchVC, animated: true) // Push the SearchVC on top of the navigation stack.
     }
     
+    @objc func textFieldChanged() {
+        guard let text = usernameTextField.text?.lowercased(), !text.isEmpty else {
+            filteredUsers = users
+            tableView.reloadData()
+            return
+        }
+        
+        filteredUsers = users.filter { $0.username.contains(text) }
+        tableView.reloadData()
+    }
+    
     func configureTextField() {
         view.addSubview(usernameTextField)
+        usernameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         NSLayoutConstraint.activate([
             usernameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -75,7 +98,7 @@ class SearchVC: UIViewController {
 extension SearchVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
+        return filteredUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -84,25 +107,7 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
         // It is not like the long list already exists.
         // This function gets called a lots when scrolling. Make sure not a lot heavy performance stuff going on here.
         let cell = tableView.dequeueReusableCell(withIdentifier: Cells.searchCell) as! SearchCell
-        let user = users[indexPath.row]
-        cell.set(dzuser: user)
+        cell.configure(with: filteredUsers[indexPath.row])
         return cell
-    }
-}
-
-extension SearchVC {
-    func fetchData() -> [DZUser] {
-        let user1 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "john_freeman")
-        let user2 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "adamdalva")
-        let user3 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "abraham")
-        let user4 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "tess_gunty")
-        let user5 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "ann_napolitano")
-        let user6 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "hernan_diaz")
-        let user7 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "luck_good")
-        let user8 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "salvadore")
-        let user9 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "greek_monk")
-        let user10 = DZUser(avatarImage: DZAvatarImageView(frame: .zero), userName: "sendoras")
-
-        return [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10]
     }
 }
