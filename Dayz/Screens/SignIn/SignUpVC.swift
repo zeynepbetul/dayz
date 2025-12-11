@@ -103,13 +103,37 @@ class SignUpVC: UIViewController {
             }
             
             guard let user = authdata?.user else { return }
-            user.sendEmailVerification { error in
-                if let error = error {
-                    print("Verification email error:", error.localizedDescription)
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+            
+            let newUser = User(
+                id: user.uid,
+                username: self.nameTextField.text ?? "",
+                email: email,
+                name: self.nameTextField.text,
+                bio: nil,
+                avatarUrl: nil,
+                followers: 0,
+                following: 0,
+                createdAt: Date()
+            )
+            
+            // Save private data
+            NetworkManager.shared.createPrivateUser(newUser) { success in
+                if !success { return }
+                
+                // Save public data
+                NetworkManager.shared.createPublicUser(newUser) { success in
+                    if success {
+                        print("User created successfully")
+                        user.sendEmailVerification { error in
+                            if let error = error {
+                                print("Verification email error:", error.localizedDescription)
+                                return
+                            }
+                            DispatchQueue.main.async {
+                                self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+                            }
+                        }
+                    }
                 }
             }
         }
