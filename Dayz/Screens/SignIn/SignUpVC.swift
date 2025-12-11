@@ -26,7 +26,7 @@ class SignUpVC: UIViewController {
     let haveAccountSubTitleLabel = DZBodyLabel(textAlignment: .center)
     let signInButton = UIButton(type: .system)
     let haveAccountStack = UIStackView()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -50,7 +50,7 @@ class SignUpVC: UIViewController {
         
         stack.axis                              = .vertical
         stack.spacing                           = 16
-               
+        
         stack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stack)
         
@@ -75,13 +75,13 @@ class SignUpVC: UIViewController {
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         signInButton.setTitleColor(.label, for: .normal)
         signInButton.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
-
+        
         haveAccountStack.axis             = .horizontal
         haveAccountStack.spacing          = 1
         haveAccountStack.alignment        = .center
         haveAccountStack.distribution     = .fillProportionally
     }
-
+    
     @objc func signInTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -147,28 +147,28 @@ class SignUpVC: UIViewController {
             }
         }
     }
-        func validateFields(email: String, password: String, username: String) -> String? {
-            if email.isEmpty || password.isEmpty {
-                return "Please fill in all fields."
-            }
-            
-            if !email.contains("@") || !email.contains(".") {
-                return "Please enter a valid email."
-            }
-            
-            if password.count < 6 {
-                return "Password must be at least 6 characters."
-            }
-            
-            if username.count < 3 {
-                return "Username must be at least 3 characters."
-            }
-            return nil
+    func validateFields(email: String, password: String, username: String) -> String? {
+        if email.isEmpty || password.isEmpty {
+            return "Please fill in all fields."
         }
         
-        
-        func createDismissKeyboardTapGesture() {
-            let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
-            view.addGestureRecognizer(recognizer)
+        if !email.contains("@") || !email.contains(".") {
+            return "Please enter a valid email."
         }
+        
+        if password.count < 6 {
+            return "Password must be at least 6 characters."
+        }
+        
+        if username.count < 3 {
+            return "Username must be at least 3 characters."
+        }
+        return nil
     }
+    
+    
+    func createDismissKeyboardTapGesture() {
+        let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(recognizer)
+    }
+}
