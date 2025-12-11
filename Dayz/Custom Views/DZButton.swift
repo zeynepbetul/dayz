@@ -27,7 +27,7 @@ class DZButton: UIButton {
     
     private func configure() {
         layer.cornerRadius       = 25
-        titleLabel?.textColor    = .white
+        setTitleColor(.white, for: .normal)
         titleLabel?.font         = UIFont.preferredFont(forTextStyle: .headline)
         translatesAutoresizingMaskIntoConstraints = false
     }
