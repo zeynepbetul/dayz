@@ -88,4 +88,22 @@ class NetworkManager {
                 }
             }
     }
+    
+    // MARK: - Fetch All Public Users
+    func fetchAllUsers(completion: @escaping ([PublicUser]) -> Void) {
+        db.collection("publicUsers")
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Fetch users error:", error)
+                    completion([])
+                    return
+                }
+                
+                let users: [PublicUser] = snapshot?.documents.compactMap { document in
+                    return try? document.data(as: PublicUser.self)
+                } ?? []
+                
+                completion(users)
+            }
+    }
 }
