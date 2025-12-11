@@ -10,6 +10,7 @@ import UIKit
 class DZAvatarImageView: UIImageView {
     
     let placeHolderImage = UIImage(systemName: "person.circle")
+    static let imageCache = NSCache<NSString, UIImage>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,5 +27,35 @@ class DZAvatarImageView: UIImageView {
         clipsToBounds      = true // image would still look like a sharp square unless we did the clipsToBounds true
         image              = placeHolderImage
     }
-
+    
+    // MARK: - Load Image from URL
+    func setImage(from urlString: String) {
+        let cacheKey = NSString(string: urlString)
+        
+        // 1. Check if it exists in cache
+        if let cachedImage = DZAvatarImageView.imageCache.object(forKey: cacheKey) {
+            self.image = cachedImage
+            return
+        }
+        
+        // 2. String → URL
+        guard let url = URL(string: urlString) else {
+            self.image = placeHolderImage
+            return
+        }
+        
+        // 3. download image async from URL
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let self = self else { return }
+            guard let data = data, error == nil else { return }
+            
+            if let downloadedImage = UIImage(data: data) {
+                DZAvatarImageView.imageCache.setObject(downloadedImage, forKey: cacheKey)
+                
+                DispatchQueue.main.async {
+                    self.image = downloadedImage
+                }
+            }
+        }.resume()
+    }
 }
