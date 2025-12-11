@@ -1,6 +1,4 @@
-# Dayz — Daily Activity Calendar App
-
-**Dayz** is an iOS application that allows users to **log their daily activities hour by hour** using a calendar-based interface. 
+# Dayz — Calendar App
 
 ---
 
