@@ -12,8 +12,8 @@ class SignUpVC: UIViewController {
     let viewTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 26)
     let viewSubTitleLabel = DZBodyLabel(textAlignment: .left)
     
-    let nameTextField = DZTextField(placeholder: "Name")
-    let nameTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
+    let usernameTextField = DZTextField(placeholder: "Username")
+    let usernameTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
     
     let emailTextField = DZTextField(placeholder: "Email")
     let emailTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
@@ -38,7 +38,7 @@ class SignUpVC: UIViewController {
     func configureComponents() {
         viewTitleLabel.text                     = "Sign Up"
         viewSubTitleLabel.text                  = "Create account"
-        nameTitleLabel.text                     = "Name"
+        usernameTitleLabel.text                 = "Username"
         emailTitleLabel.text                    = "Email"
         passwordTitleLabel.text                 = "Password"
         haveAccountSubTitleLabel.text           = "Have an account?"
@@ -46,7 +46,7 @@ class SignUpVC: UIViewController {
         registerButton.addTarget(self, action: #selector(registerTapped), for: .touchUpInside)
         
         configureHaveAccountStack()
-        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, nameTitleLabel, nameTextField, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, registerButton, haveAccountStack])
+        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, usernameTitleLabel, usernameTextField, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, registerButton, haveAccountStack])
         
         stack.axis                              = .vertical
         stack.spacing                           = 16
@@ -59,7 +59,7 @@ class SignUpVC: UIViewController {
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            nameTextField.heightAnchor.constraint(equalToConstant: 44),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 44),
             emailTextField.heightAnchor.constraint(equalToConstant: 44),
             passwordTextField.heightAnchor.constraint(equalToConstant: 44),
             
@@ -106,9 +106,9 @@ class SignUpVC: UIViewController {
             
             let newUser = User(
                 id: user.uid,
-                username: self.nameTextField.text ?? "",
+                username: self.usernameTextField.text ?? "",
                 email: email,
-                name: self.nameTextField.text,
+                name: nil,
                 bio: nil,
                 avatarUrl: nil,
                 followers: 0,
