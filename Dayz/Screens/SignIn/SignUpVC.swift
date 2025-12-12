@@ -149,17 +149,20 @@ class SignUpVC: UIViewController {
                 // Save private data
                 NetworkManager.shared.createPrivateUser(newUser) { error in
                     if let error = error {
-                        print(error)
+                        print(error.rawValue)
                         return
                     }
                     
                     // Save public data
                     NetworkManager.shared.createPublicUser(newUser) { error in
                         if let error = error {
-                            print("User created successfully")
+                            print(error.rawValue)
+                            return
+                        }
+                        print("User created successfully")
                             user.sendEmailVerification { error in
                                 if let error = error {
-                                    print(ErrorMessage.emailVerificationError)
+                                    print(ErrorMessage.emailVerificationError.rawValue)
                                     return
                                 }
                                 DispatchQueue.main.async {
