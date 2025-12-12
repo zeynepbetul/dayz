@@ -92,13 +92,14 @@ class SignUpVC: UIViewController {
             return
         }
         
-        NetworkManager.shared.checkUsernameExists(username) { error in
+        NetworkManager.shared.checkUsernameExists(username) { result in
             DispatchQueue.main.async {
-                if let error = error {
+                switch result {
+                case .success(()):
+                    self.usernameErrorLabel.isHidden = true
+                case .failure(let error):
                     self.usernameErrorLabel.text = error.rawValue
                     self.usernameErrorLabel.isHidden = false
-                } else {
-                    self.usernameErrorLabel.isHidden = true
                 }
             }
         }
@@ -147,28 +148,31 @@ class SignUpVC: UIViewController {
                 )
                 
                 // Save private data
-                NetworkManager.shared.createPrivateUser(newUser) { error in
-                    if let error = error {
-                        print(error.rawValue)
-                        return
-                    }
-                    
-                    // Save public data
-                    NetworkManager.shared.createPublicUser(newUser) { error in
-                        if let error = error {
-                            print(error.rawValue)
-                            return
-                        }
-                        print("User created successfully")
-                        user.sendEmailVerification { error in
-                            if let error = error {
-                                print(ErrorMessage.emailVerificationError.rawValue)
+                NetworkManager.shared.createPrivateUser(newUser) { result in
+                    switch result {
+                    case .success(()):
+                        // Save public data
+                        NetworkManager.shared.createPublicUser(newUser) { result in
+                            switch result {
+                            case .success(()):
+                                print("User created successfully")
+                                user.sendEmailVerification { error in
+                                    if let error = error {
+                                        print(DZError.emailVerificationError.rawValue)
+                                        return
+                                    }
+                                    DispatchQueue.main.async {
+                                        self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+                                    }
+                                }
+                            case .failure(let error):
+                                print(error.rawValue)
                                 return
                             }
-                            DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
-                            }
                         }
+                    case .failure(let error):
+                        print(error.rawValue)
+                        return
                     }
                 }
             }
