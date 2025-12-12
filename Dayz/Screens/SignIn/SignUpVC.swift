@@ -121,54 +121,54 @@ class SignUpVC: UIViewController {
         }
         
         // TODO: Checks before allow register: Check if username exists
-            Auth.auth().createUser(withEmail: email, password: password) { authdata, error in
-                if let error = error {
-                    print(error.localizedDescription)
+        Auth.auth().createUser(withEmail: email, password: password) { authdata, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let user = authdata?.user else { return }
+            
+            let newUser = User(
+                id: user.uid,
+                username: username,
+                email: email,
+                name: nil,
+                bio: nil,
+                avatarUrl: nil,
+                followers: 0,
+                following: 0,
+                createdAt: Date()
+            )
+            
+            // Save private data
+            NetworkManager.shared.createPrivateUser(newUser) { result in
+                switch result {
+                case .success(()):
+                    // Save public data
+                    NetworkManager.shared.createPublicUser(newUser) { result in
+                        switch result {
+                        case .success(()):
+                            print("User created successfully")
+                            user.sendEmailVerification { error in
+                                if let error = error {
+                                    print(DZError.emailVerificationError.rawValue)
+                                    return
+                                }
+                                DispatchQueue.main.async {
+                                    self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
+                                }
+                            }
+                        case .failure(let error):
+                            print(error.rawValue)
+                            return
+                        }
+                    }
+                case .failure(let error):
+                    print(error.rawValue)
                     return
                 }
-                
-                guard let user = authdata?.user else { return }
-                
-                let newUser = User(
-                    id: user.uid,
-                    username: username,
-                    email: email,
-                    name: nil,
-                    bio: nil,
-                    avatarUrl: nil,
-                    followers: 0,
-                    following: 0,
-                    createdAt: Date()
-                )
-                
-                // Save private data
-                NetworkManager.shared.createPrivateUser(newUser) { result in
-                    switch result {
-                    case .success(()):
-                        // Save public data
-                        NetworkManager.shared.createPublicUser(newUser) { result in
-                            switch result {
-                            case .success(()):
-                                print("User created successfully")
-                                user.sendEmailVerification { error in
-                                    if let error = error {
-                                        print(DZError.emailVerificationError.rawValue)
-                                        return
-                                    }
-                                    DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
-                                    }
-                                }
-                            case .failure(let error):
-                                print(error.rawValue)
-                                return
-                            }
-                        }
-                    case .failure(let error):
-                        print(error.rawValue)
-                        return
-                    }
-                }
+            }
         }
     }
     func validateFields(email: String, password: String, username: String) -> String? {
