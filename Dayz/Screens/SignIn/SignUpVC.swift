@@ -160,14 +160,13 @@ class SignUpVC: UIViewController {
                             return
                         }
                         print("User created successfully")
-                            user.sendEmailVerification { error in
-                                if let error = error {
-                                    print(ErrorMessage.emailVerificationError.rawValue)
-                                    return
-                                }
-                                DispatchQueue.main.async {
-                                    self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
-                                }
+                        user.sendEmailVerification { error in
+                            if let error = error {
+                                print(ErrorMessage.emailVerificationError.rawValue)
+                                return
+                            }
+                            DispatchQueue.main.async {
+                                self.navigationController?.pushViewController(ValidateEmailVC(), animated: true)
                             }
                         }
                     }
