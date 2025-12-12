@@ -120,13 +120,7 @@ class SignUpVC: UIViewController {
             return
         }
         
-        // Check if username exists
-        NetworkManager.shared.checkUsernameExists(username) { error in
-            if let error = error {
-                print(error)
-                return
-            }
-            
+        // TODO: Checks before allow register: Check if username exists
             Auth.auth().createUser(withEmail: email, password: password) { authdata, error in
                 if let error = error {
                     print(error.localizedDescription)
@@ -175,7 +169,6 @@ class SignUpVC: UIViewController {
                         return
                     }
                 }
-            }
         }
     }
     func validateFields(email: String, password: String, username: String) -> String? {
