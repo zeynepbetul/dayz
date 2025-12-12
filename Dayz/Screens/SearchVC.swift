@@ -30,11 +30,17 @@ class SearchVC: UIViewController {
     }
     
     func fetchUsersFromFirebase() {
-        NetworkManager.shared.fetchAllUsers { fetchedUsers in
+        NetworkManager.shared.fetchAllUsers { result in
             DispatchQueue.main.async {
-                self.users = fetchedUsers
-                self.filteredUsers = fetchedUsers   // show all at the first openning
-                self.tableView.reloadData()
+                switch result {
+                case .success(let fetchedUsers):
+                    self.users = fetchedUsers
+                    self.filteredUsers = fetchedUsers   // show all at the first openning
+                    self.tableView.reloadData()
+                    
+                case .failure(let error):
+                    self.presentDZAlertOnMainThread(title: "Bad Stuff Happend", message: error.rawValue, buttonTitle: "ok", buttonTitleSec: nil)
+                }
             }
         }
     }
