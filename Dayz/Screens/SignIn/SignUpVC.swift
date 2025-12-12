@@ -14,6 +14,7 @@ class SignUpVC: UIViewController {
     
     let usernameTextField = DZTextField(placeholder: "Username")
     let usernameTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
+    let usernameErrorLabel = DZBodyLabel(textAlignment: .left)
     
     let emailTextField = DZTextField(placeholder: "Email")
     let emailTitleLabel = DZTitleLabel(textAlignment: .left, fontSize: 11)
@@ -42,11 +43,13 @@ class SignUpVC: UIViewController {
         emailTitleLabel.text                    = "Email"
         passwordTitleLabel.text                 = "Password"
         haveAccountSubTitleLabel.text           = "Have an account?"
+        configureErrorLabel()
         
         registerButton.addTarget(self, action: #selector(registerTapped), for: .touchUpInside)
+        usernameTextField.addTarget(self, action: #selector(usernameDidEndEditing), for: .editingDidEnd)
         
         configureHaveAccountStack()
-        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, usernameTitleLabel, usernameTextField, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, registerButton, haveAccountStack])
+        let stack = UIStackView(arrangedSubviews: [viewTitleLabel, viewSubTitleLabel, usernameTitleLabel, usernameTextField, usernameErrorLabel, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, registerButton, haveAccountStack])
         
         stack.axis                              = .vertical
         stack.spacing                           = 16
@@ -80,6 +83,25 @@ class SignUpVC: UIViewController {
         haveAccountStack.spacing          = 1
         haveAccountStack.alignment        = .center
         haveAccountStack.distribution     = .fillProportionally
+    }
+    
+    @objc func usernameDidEndEditing() {
+        guard let username = usernameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !username.isEmpty else {
+            usernameErrorLabel.isHidden = true
+            return
+        }
+        
+        NetworkManager.shared.checkUsernameExists(username) { error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.usernameErrorLabel.text = error.rawValue
+                    self.usernameErrorLabel.isHidden = false
+                } else {
+                    self.usernameErrorLabel.isHidden = true
+                }
+            }
+        }
     }
     
     @objc func signInTapped() {
@@ -170,5 +192,12 @@ class SignUpVC: UIViewController {
     func createDismissKeyboardTapGesture() {
         let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(recognizer)
+    }
+    
+    func configureErrorLabel() {
+        usernameErrorLabel.textColor = .systemRed
+        usernameErrorLabel.font = UIFont.systemFont(ofSize: 12)
+        usernameErrorLabel.numberOfLines = 0
+        usernameErrorLabel.isHidden = true
     }
 }
