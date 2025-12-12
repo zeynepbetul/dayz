@@ -18,7 +18,7 @@ class NetworkManager {
     }
     
     // MARK: - Create Private User
-    func createPrivateUser(_ user: User, completion: @escaping (Bool) -> Void) {
+    func createPrivateUser(_ user: User, completion: @escaping (ErrorMessage?) -> Void) {
         let privateData = PrivateUser(id: user.id,
                                       email: user.email,
                                       createdAt: user.createdAt)
@@ -29,19 +29,19 @@ class NetworkManager {
                 .setData(from: privateData) { error in
                     if let error = error {
                         print("Private user save error:", error)
-                        completion(false)
+                        completion(.userCreateError)
                     } else {
-                        completion(true)
+                        completion(nil)
                     }
                 }
         } catch {
             print("Encoding error:", error)
-            completion(false)
+            completion(.unknownError)
         }
     }
     
     // MARK: - Create Public User
-    func createPublicUser(_ user: User, completion: @escaping (Bool) -> Void) {
+    func createPublicUser(_ user: User, completion: @escaping (ErrorMessage?) -> Void) {
         
         let publicData = PublicUser(id: user.id,
                                     username: user.username.lowercased(),
@@ -57,14 +57,14 @@ class NetworkManager {
                 .setData(from: publicData) { error in
                     if let error = error {
                         print("Public user save error:", error)
-                        completion(false)
+                        completion(.userCreateError)
                     } else {
-                        completion(true)
+                        completion(nil)
                     }
                 }
         } catch {
             print("Encoding error:", error)
-            completion(false)
+            completion(.unknownError)
         }
     }
     
