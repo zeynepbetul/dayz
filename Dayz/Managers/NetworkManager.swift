@@ -18,7 +18,7 @@ class NetworkManager {
     }
     
     // MARK: - Create Private User
-    func createPrivateUser(_ user: User, completion: @escaping (ErrorMessage?) -> Void) {
+    func createPrivateUser(_ user: User, completion: @escaping (Result<Void, DZError>) -> Void) {
         let privateData = PrivateUser(id: user.id,
                                       email: user.email,
                                       createdAt: user.createdAt)
@@ -29,19 +29,19 @@ class NetworkManager {
                 .setData(from: privateData) { error in
                     if let error = error {
                         print("Private user save error:", error)
-                        completion(.userCreateError)
+                        completion(.failure(.userCreateError))
                     } else {
-                        completion(nil)
+                        completion(.success(()))
                     }
                 }
         } catch {
             print("Encoding error:", error)
-            completion(.unknownError)
+            completion(.failure(.unknownError))
         }
     }
     
     // MARK: - Create Public User
-    func createPublicUser(_ user: User, completion: @escaping (ErrorMessage?) -> Void) {
+    func createPublicUser(_ user: User, completion: @escaping (Result<Void, DZError>) -> Void) {
         
         let publicData = PublicUser(id: user.id,
                                     username: user.username.lowercased(),
@@ -57,19 +57,19 @@ class NetworkManager {
                 .setData(from: publicData) { error in
                     if let error = error {
                         print("Public user save error:", error)
-                        completion(.userCreateError)
+                        completion(.failure(.userCreateError))
                     } else {
-                        completion(nil)
+                        completion(.success(()))
                     }
                 }
         } catch {
             print("Encoding error:", error)
-            completion(.unknownError)
+            completion(.failure(.unknownError))
         }
     }
     
     // MARK: - Check Username Availability
-    func checkUsernameExists(_ username: String, completion: @escaping (ErrorMessage?) -> Void) {
+    func checkUsernameExists(_ username: String, completion: @escaping (Result<Void, DZError>) -> Void) {
         
         db.collection("publicUsers")
             .whereField("username", isEqualTo: username.lowercased())
@@ -77,25 +77,25 @@ class NetworkManager {
                 
                 if let error = error {
                     print("Username check error:", error)
-                    completion(.networkError)
+                    completion(.failure(.networkError))
                     return
                 }
                 
                 if let documents = snapshot?.documents, !documents.isEmpty {
-                    completion(.usernameTaken)  // username already exists
+                    completion(.failure(.usernameTaken))  // username already exists
                 } else {
-                    completion(nil) // username is available
+                    completion(.success(())) // username is available
                 }
             }
     }
     
     // MARK: - Fetch All Public Users
-    func fetchAllUsers(completion: @escaping ([PublicUser]) -> Void) {
+    func fetchAllUsers(completion: @escaping (Result<[PublicUser], DZError>) -> Void) {
         db.collection("publicUsers")
             .getDocuments { snapshot, error in
                 if let error = error {
                     print("Fetch users error:", error)
-                    completion([])
+                    completion(.failure(.loadUsersError))
                     return
                 }
                 
@@ -103,7 +103,7 @@ class NetworkManager {
                     return try? document.data(as: PublicUser.self)
                 } ?? []
                 
-                completion(users)
+                completion(.success(users))
             }
     }
 }
