@@ -51,7 +51,14 @@ class SearchVC: UIViewController, UITableViewDelegate {
     }
     
     func fetchUsersFromFirebase() {
-        NetworkManager.shared.fetchAllUsers { result in
+        /* we used self. self in this case is our SearchVC.
+         our network manager has a strong reference to SearchVC. This could cause a memory leak.
+         to make this self weak, add [weak self]. Now self can be nil, so add ?
+         If we dont want to use self?. first need to unwrap self.
+         */
+        NetworkManager.shared.fetchAllUsers { [weak self] result in
+            guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 switch result {
                 case .success(let fetchedUsers):
