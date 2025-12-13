@@ -10,7 +10,6 @@ import UIKit
 class DZAvatarImageView: UIImageView {
     
     let placeHolderImage = UIImage(systemName: "person.circle")
-    static let imageCache = NSCache<NSString, UIImage>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,7 +32,7 @@ class DZAvatarImageView: UIImageView {
         let cacheKey = NSString(string: urlString)
         
         // 1. Check if it exists in cache
-        if let cachedImage = DZAvatarImageView.imageCache.object(forKey: cacheKey) {
+        if let cachedImage = NetworkManager.shared.imageCache.object(forKey: cacheKey) {
             self.image = cachedImage
             return
         }
@@ -50,7 +49,7 @@ class DZAvatarImageView: UIImageView {
             guard let data = data, error == nil else { return }
             
             if let downloadedImage = UIImage(data: data) {
-                DZAvatarImageView.imageCache.setObject(downloadedImage, forKey: cacheKey)
+                NetworkManager.shared.imageCache.setObject(downloadedImage, forKey: cacheKey)
                 
                 DispatchQueue.main.async {
                     self.image = downloadedImage

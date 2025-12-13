@@ -12,6 +12,7 @@ import FirebaseFirestore
 class NetworkManager {
     static let shared = NetworkManager()
     private let db = Firestore.firestore()
+    let imageCache = NSCache<NSString, UIImage>()
     
     private init() {
         

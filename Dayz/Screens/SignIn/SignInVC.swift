@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SignInVC: UIViewController {
     
@@ -98,6 +99,29 @@ class SignInVC: UIViewController {
     
     @objc func loginTapped() {
         
+        // 1. TextField değerlerini al
+        guard let email = emailTextField.text, !email.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty else {
+            return
+        }
+        
+        // 2. Firebase ile giriş yap
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
+            
+            guard self != nil else { return }
+            
+            // 3. Hata kontrolü
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            // 4. Başarılı giriş
+            print("Login successful: \(result?.user.uid ?? "")")
+            
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as! SceneDelegate
+            sceneDelegate.window?.rootViewController = sceneDelegate.createTabbar()
+        }
     }
     
     @objc func googleTapped() {

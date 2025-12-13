@@ -151,7 +151,7 @@ class SignUpVC: UIViewController {
                         case .success(()):
                             print("User created successfully")
                             user.sendEmailVerification { error in
-                                if let error = error {
+                                if let _ = error {
                                     print(DZError.emailVerificationError.rawValue)
                                     return
                                 }
