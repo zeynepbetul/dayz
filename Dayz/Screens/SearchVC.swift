@@ -7,12 +7,17 @@
 
 import UIKit
 
-class SearchVC: UIViewController {
+class SearchVC: UIViewController, UITableViewDelegate {
+    
+    enum Section {
+        case main
+    }
     
     let usernameTextField = DZTextField(placeholder: "Search")
     var tableView = UITableView()
-    var users: [PublicUser] = [] // The table view is just a list of things what are we showing.
-    var filteredUsers: [PublicUser] = []
+    
+    private var users: [PublicUser] = [] // The table view is just a list of things what are we showing.
+    private var dataSource: UITableViewDiffableDataSource<Section, PublicUser>!
     
     struct Cells {
         static let searchCell = "SearchCell"
@@ -24,9 +29,25 @@ class SearchVC: UIViewController {
     
         configureTextField()
         configureTableView()
+        configureDataSource()
         createDismissKeyboardTapGesture()
         
         fetchUsersFromFirebase()
+    }
+    
+    func configureDataSource() {
+        dataSource = UITableViewDiffableDataSource<Section, PublicUser>(tableView: tableView, cellProvider: { tableView, indexPath, publicUser in
+            let cell = tableView.dequeueReusableCell(withIdentifier: Cells.searchCell, for: indexPath) as! SearchCell
+            cell.configure(with: publicUser)
+            return cell
+        })
+    }
+    
+    func updateData(users: [PublicUser], animate: Bool = true) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, PublicUser>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(users)
+        dataSource.apply(snapshot, animatingDifferences: animate)
     }
     
     func fetchUsersFromFirebase() {
@@ -35,8 +56,7 @@ class SearchVC: UIViewController {
                 switch result {
                 case .success(let fetchedUsers):
                     self.users = fetchedUsers
-                    self.filteredUsers = fetchedUsers   // show all at the first openning
-                    self.tableView.reloadData()
+                    self.updateData(users: fetchedUsers, animate: false)
                     
                 case .failure(let error):
                     self.presentDZAlertOnMainThread(title: "Bad Stuff Happend", message: error.rawValue, buttonTitle: "ok", buttonTitleSec: nil)
@@ -57,13 +77,12 @@ class SearchVC: UIViewController {
     
     @objc func textFieldChanged() {
         guard let text = usernameTextField.text?.lowercased(), !text.isEmpty else {
-            filteredUsers = users
-            tableView.reloadData()
+            updateData(users: users)
             return
         }
         
-        filteredUsers = users.filter { $0.username.contains(text) }
-        tableView.reloadData()
+        let filtered = users.filter { $0.username.contains(text) }
+        updateData(users: filtered)
     }
     
     func configureTextField() {
@@ -82,7 +101,7 @@ class SearchVC: UIViewController {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
-        setTableViewDelegates()
+        tableView.delegate = self
         tableView.rowHeight = 50
         
         tableView.register(SearchCell.self, forCellReuseIdentifier: Cells.searchCell)
@@ -93,27 +112,5 @@ class SearchVC: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-    }
-    
-    func setTableViewDelegates() {
-        tableView.delegate = self
-        tableView.dataSource = self
-    }
-}
-
-extension SearchVC: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredUsers.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // this func gets called every time a new cell comes on the screen. You see this DQReuseableCell.
-        // Phone only generates enough cells that are on the screen. Just before a cell about to come on the screen, it gets configured.
-        // It is not like the long list already exists.
-        // This function gets called a lots when scrolling. Make sure not a lot heavy performance stuff going on here.
-        let cell = tableView.dequeueReusableCell(withIdentifier: Cells.searchCell) as! SearchCell
-        cell.configure(with: filteredUsers[indexPath.row])
-        return cell
     }
 }

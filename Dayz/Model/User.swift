@@ -19,7 +19,7 @@ struct User: Codable {
     var createdAt: Date
 }
 
-struct PublicUser: Codable {
+struct PublicUser: Codable, Hashable {
     var id: String
     var username: String
     var name: String?
