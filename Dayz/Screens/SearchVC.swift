@@ -21,6 +21,7 @@ class SearchVC: UIViewController {
     private var dataSource: UITableViewDiffableDataSource<Section, PublicUser>!
     private var lastDocument: DocumentSnapshot?
     private var isLoading = false
+    private var currentQuery: String = ""
     
     struct Cells {
         static let searchCell = "SearchCell"
@@ -64,6 +65,7 @@ class SearchVC: UIViewController {
     @objc func textFieldChanged() {
         guard let text = usernameTextField.text?.lowercased(),
               text.count >= 3 else {
+            currentQuery = ""
             updateData(users: [], animate: false)
             return
         }
@@ -78,11 +80,15 @@ class SearchVC: UIViewController {
          If we dont want to use self?. first need to unwrap self.
          */
         
+        currentQuery = query
         isLoading = true
         lastDocument = nil
 
         NetworkManager.shared.searchUsers(usernamePrefix: query) { [weak self] result in
             guard let self = self else { return }
+            
+            // if it is old query do nothing
+            guard query == self.currentQuery else { return }
 
             DispatchQueue.main.async {
                 self.isLoading = false
@@ -101,11 +107,12 @@ class SearchVC: UIViewController {
 
     func loadNextPage() {
         // cursor-based pagination
-        guard !isLoading, let lastDocument = lastDocument, let text = usernameTextField.text, text.count >= 3 else { return }
+        guard !isLoading, let lastDocument = lastDocument, let text = usernameTextField.text, text.count >= 3, text == currentQuery else { return }
         isLoading = true
 
         NetworkManager.shared.searchUsers(usernamePrefix: text, lastDocument: lastDocument) { [weak self] result in
             guard let self = self else { return }
+            guard text == self.currentQuery else { return }
 
             DispatchQueue.main.async {
                 self.isLoading = false
