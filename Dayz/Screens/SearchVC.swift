@@ -87,14 +87,13 @@ class SearchVC: UIViewController {
         showLoadingView()
         
         NetworkManager.shared.searchUsers(usernamePrefix: query) { [weak self] result in
-            #warning("when network call done, dismiss it")
             guard let self = self else { return }
-            
             // if it is old query do nothing
             guard query == self.currentQuery else { return }
 
             DispatchQueue.main.async {
                 self.isLoading = false
+                self.dismissLoadingView()
 
                 switch result {
                 case .success(let (users, lastDoc)):
@@ -116,13 +115,13 @@ class SearchVC: UIViewController {
         showLoadingView()
         
         NetworkManager.shared.searchUsers(usernamePrefix: text, lastDocument: lastDocument) { [weak self] result in
-            #warning("when network call done, dismiss it")
             guard let self = self else { return }
             guard text == self.currentQuery else { return }
 
             DispatchQueue.main.async {
                 self.isLoading = false
-
+                self.dismissLoadingView()
+                
                 if case .success(let (users, lastDoc)) = result {
                     self.lastDocument = lastDoc
                     self.appendData(users: users)
