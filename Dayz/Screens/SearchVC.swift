@@ -83,8 +83,11 @@ class SearchVC: UIViewController {
         currentQuery = query
         isLoading = true
         lastDocument = nil
-
+        
+        showLoadingView()
+        
         NetworkManager.shared.searchUsers(usernamePrefix: query) { [weak self] result in
+            #warning("when network call done, dismiss it")
             guard let self = self else { return }
             
             // if it is old query do nothing
@@ -109,8 +112,11 @@ class SearchVC: UIViewController {
         // cursor-based pagination
         guard !isLoading, let lastDocument = lastDocument, let text = usernameTextField.text, text.count >= 3, text == currentQuery else { return }
         isLoading = true
-
+        
+        showLoadingView()
+        
         NetworkManager.shared.searchUsers(usernamePrefix: text, lastDocument: lastDocument) { [weak self] result in
+            #warning("when network call done, dismiss it")
             guard let self = self else { return }
             guard text == self.currentQuery else { return }
 
