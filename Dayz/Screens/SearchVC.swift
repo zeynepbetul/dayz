@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
-class SearchVC: UIViewController, UITableViewDelegate {
+class SearchVC: UIViewController {
     
     enum Section {
         case main
@@ -18,6 +19,8 @@ class SearchVC: UIViewController, UITableViewDelegate {
     
     private var users: [PublicUser] = [] // The table view is just a list of things what are we showing.
     private var dataSource: UITableViewDiffableDataSource<Section, PublicUser>!
+    private var lastDocument: DocumentSnapshot?
+    private var isLoading = false
     
     struct Cells {
         static let searchCell = "SearchCell"
@@ -31,8 +34,6 @@ class SearchVC: UIViewController, UITableViewDelegate {
         configureTableView()
         configureDataSource()
         createDismissKeyboardTapGesture()
-        
-        fetchUsersFromFirebase()
     }
     
     func configureDataSource() {
@@ -50,28 +51,6 @@ class SearchVC: UIViewController, UITableViewDelegate {
         dataSource.apply(snapshot, animatingDifferences: animate)
     }
     
-    func fetchUsersFromFirebase() {
-        /* we used self. self in this case is our SearchVC.
-         our network manager has a strong reference to SearchVC. This could cause a memory leak.
-         to make this self weak, add [weak self]. Now self can be nil, so add ?
-         If we dont want to use self?. first need to unwrap self.
-         */
-        NetworkManager.shared.fetchAllUsers { [weak self] result in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let fetchedUsers):
-                    self.users = fetchedUsers
-                    self.updateData(users: fetchedUsers, animate: false)
-                    
-                case .failure(let error):
-                    self.presentDZAlertOnMainThread(title: "Bad Stuff Happend", message: error.rawValue, buttonTitle: "ok", buttonTitleSec: nil)
-                }
-            }
-        }
-    }
-    
     func createDismissKeyboardTapGesture() {
             let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
             view.addGestureRecognizer(recognizer)
@@ -83,13 +62,66 @@ class SearchVC: UIViewController, UITableViewDelegate {
     }
     
     @objc func textFieldChanged() {
-        guard let text = usernameTextField.text?.lowercased(), !text.isEmpty else {
-            updateData(users: users)
+        guard let text = usernameTextField.text?.lowercased(),
+              text.count >= 3 else {
+            updateData(users: [], animate: false)
             return
         }
+
+        searchUsers(query: text)
+    }
+    
+    func searchUsers(query: String) {
+        /* used self. self in this case is our SearchVC.
+         our network manager has a strong reference to SearchVC. This could cause a memory leak.
+         to make this self weak, add [weak self]. Now self can be nil, so add ?
+         If we dont want to use self?. first need to unwrap self.
+         */
         
-        let filtered = users.filter { $0.username.contains(text) }
-        updateData(users: filtered)
+        isLoading = true
+        lastDocument = nil
+
+        NetworkManager.shared.searchUsers(usernamePrefix: query) { [weak self] result in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                self.isLoading = false
+
+                switch result {
+                case .success(let (users, lastDoc)):
+                    self.lastDocument = lastDoc
+                    self.updateData(users: users, animate: false)
+
+                case .failure(let error):
+                    self.presentDZAlertOnMainThread(title: "Error", message: error.rawValue, buttonTitle: "OK", buttonTitleSec: nil)
+                }
+            }
+        }
+    }
+
+    func loadNextPage() {
+        // cursor-based pagination
+        guard !isLoading, let lastDocument = lastDocument, let text = usernameTextField.text, text.count >= 3 else { return }
+        isLoading = true
+
+        NetworkManager.shared.searchUsers(usernamePrefix: text, lastDocument: lastDocument) { [weak self] result in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                self.isLoading = false
+
+                if case .success(let (users, lastDoc)) = result {
+                    self.lastDocument = lastDoc
+                    self.appendData(users: users)
+                }
+            }
+        }
+    }
+
+    func appendData(users: [PublicUser]) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(users)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     func configureTextField() {
@@ -119,5 +151,21 @@ class SearchVC: UIViewController, UITableViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+}
+
+extension SearchVC: UITableViewDelegate {
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        // Trigger pagination after the user finishes dragging
+        // to reduce unnecessary API calls.
+        
+        let offsetY         = scrollView.contentOffset.y
+        let contentHeight   = scrollView.contentSize.height
+        let height          = scrollView.frame.size.height
+        
+        if offsetY > contentHeight - height * 1.5 {
+            loadNextPage()
+        }
     }
 }

@@ -107,4 +107,29 @@ class NetworkManager {
                 completion(.success(users))
             }
     }
+    
+    func searchUsers(usernamePrefix: String, lastDocument: DocumentSnapshot? = nil, completion: @escaping (Result<([PublicUser], DocumentSnapshot?), DZError>) -> Void) {
+        var query = db.collection("publicUsers")
+            .order(by: "username")
+            .whereField("username", isGreaterThanOrEqualTo: usernamePrefix)
+            .whereField("username", isLessThan: usernamePrefix + "\u{f8ff}")
+            .limit(to: 20)
+        
+        if let lastDocument = lastDocument {
+            query = query.start(afterDocument: lastDocument)
+        }
+        
+        query.getDocuments { snapshot, error in
+            if let _ = error {
+                completion(.failure(.networkError))
+                return
+            }
+            
+            let users = snapshot?.documents.compactMap {
+                try? $0.data(as: PublicUser.self)
+            } ?? []
+            
+            completion(.success((users, snapshot?.documents.last)))
+        }
+    }
 }
