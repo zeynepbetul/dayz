@@ -90,24 +90,6 @@ class NetworkManager {
             }
     }
     
-    // MARK: - Fetch All Public Users
-    func fetchAllUsers(completion: @escaping (Result<[PublicUser], DZError>) -> Void) {
-        db.collection("publicUsers")
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Fetch users error:", error)
-                    completion(.failure(.loadUsersError))
-                    return
-                }
-                
-                let users: [PublicUser] = snapshot?.documents.compactMap { document in
-                    return try? document.data(as: PublicUser.self)
-                } ?? []
-                
-                completion(.success(users))
-            }
-    }
-    
     func searchUsers(usernamePrefix: String, lastDocument: DocumentSnapshot? = nil, completion: @escaping (Result<([PublicUser], DocumentSnapshot?), DZError>) -> Void) {
         var query = db.collection("publicUsers")
             .order(by: "username")
