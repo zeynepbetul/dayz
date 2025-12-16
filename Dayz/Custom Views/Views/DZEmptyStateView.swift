@@ -34,7 +34,8 @@ class DZEmptyStateView: UIView {
         messageLabel.numberOfLines   = 3
         messageLabel.textColor       = .secondaryLabel
         
-        logoImageView.image          = UIImage(named: "AppIcon")
+        logoImageView.image          = UIImage(systemName: "calendar")
+        logoImageView.tintColor      = .secondaryLabel
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             messageLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -150),
