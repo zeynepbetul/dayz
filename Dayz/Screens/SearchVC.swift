@@ -14,7 +14,6 @@ class SearchVC: UIViewController {
         case main
     }
     
-    let usernameTextField = DZTextField(placeholder: "Search")
     var tableView = UITableView()
     
     private var users: [PublicUser] = [] // The table view is just a list of things what are we showing.
@@ -32,7 +31,7 @@ class SearchVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
     
-        configureTextField()
+        configureSearchController()
         configureTableView()
         configureDataSource()
         createDismissKeyboardTapGesture()
@@ -57,23 +56,7 @@ class SearchVC: UIViewController {
             let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
             view.addGestureRecognizer(recognizer)
         }
-        
-    @objc func searchTapped() {
-        let searchVC = SearchVC()
-        navigationController?.pushViewController(searchVC, animated: true) // Push the SearchVC on top of the navigation stack.
-    }
-    
-    @objc func textFieldChanged() {
-        guard let text = usernameTextField.text?.lowercased(),
-              text.count >= 3 else {
-            currentQuery = ""
-            updateData(users: [], animate: false)
-            return
-        }
 
-        searchUsers(query: text)
-    }
-    
     func searchUsers(query: String) {
         /* used self. self in this case is our SearchVC.
          our network manager has a strong reference to SearchVC. This could cause a memory leak.
@@ -118,7 +101,7 @@ class SearchVC: UIViewController {
 
     func loadNextPage() {
         // cursor-based pagination
-        guard !isLoading, let lastDocument = lastDocument, let text = usernameTextField.text, text.count >= 3, text == currentQuery else { return }
+        guard !isLoading, let lastDocument = lastDocument, let text = currentQuery, text.count >= 3, text == currentQuery else { return }
         isLoading = true
         
         showLoadingView()
@@ -145,16 +128,11 @@ class SearchVC: UIViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    func configureTextField() {
-        view.addSubview(usernameTextField)
-        usernameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        
-        NSLayoutConstraint.activate([
-            usernameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            usernameTextField.heightAnchor.constraint(equalToConstant: 50)
-        ])
+    func configureSearchController() {
+        let searchController                   = UISearchController()
+        searchController.searchResultsUpdater  = self
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController        = searchController
     }
     
     func configureTableView() {
@@ -167,7 +145,7 @@ class SearchVC: UIViewController {
         tableView.register(SearchCell.self, forCellReuseIdentifier: Cells.searchCell)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -188,5 +166,29 @@ extension SearchVC: UITableViewDelegate {
         if offsetY > contentHeight - height * 1.5 {
             loadNextPage()
         }
+    }
+}
+
+extension SearchVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        
+        if text.isEmpty {
+            currentQuery = ""
+            updateData(users: [], animate: false)
+            emptyStateView?.removeFromSuperview()
+            emptyStateView = nil
+            return
+        }
+        
+        guard text.count >= 3 else {
+            return
+        }
+        
+        guard text != currentQuery else {
+            return
+        }
+        
+        searchUsers(query: text)
     }
 }
