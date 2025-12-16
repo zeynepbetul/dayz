@@ -101,7 +101,8 @@ class SearchVC: UIViewController {
 
     func loadNextPage() {
         // cursor-based pagination
-        guard !isLoading, let lastDocument = lastDocument, let text = currentQuery, text.count >= 3, text == currentQuery else { return }
+        guard !isLoading, let lastDocument = lastDocument, currentQuery.count >= 3 else { return }
+        let text = currentQuery
         isLoading = true
         
         showLoadingView()
