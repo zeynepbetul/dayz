@@ -132,6 +132,7 @@ class SearchVC: UIViewController {
     func configureSearchController() {
         let searchController                   = UISearchController()
         searchController.searchResultsUpdater  = self
+        searchController.searchBar.delegate    = self
         searchController.searchBar.placeholder = "Search"
         navigationItem.searchController        = searchController
     }
@@ -170,7 +171,7 @@ extension SearchVC: UITableViewDelegate {
     }
 }
 
-extension SearchVC: UISearchResultsUpdating {
+extension SearchVC: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         
@@ -191,5 +192,18 @@ extension SearchVC: UISearchResultsUpdating {
         }
         
         searchUsers(query: text)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        currentQuery = ""
+        lastDocument = nil
+        isLoading = false
+        
+        updateData(users: [], animate: false)
+        
+        emptyStateView?.removeFromSuperview()
+        emptyStateView = nil
+        
+        searchBar.resignFirstResponder()
     }
 }
