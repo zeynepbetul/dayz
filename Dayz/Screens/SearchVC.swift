@@ -169,6 +169,17 @@ extension SearchVC: UITableViewDelegate {
             loadNextPage()
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        tableView.deselectRow(at: indexPath, animated: true)
+ 
+        guard let user = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        let destVC = UserInfoVC()
+        let navController = UINavigationController(rootViewController: destVC)
+        present(navController, animated: true)
+    }
 }
 
 extension SearchVC: UISearchResultsUpdating, UISearchBarDelegate {
