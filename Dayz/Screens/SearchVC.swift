@@ -185,6 +185,7 @@ extension SearchVC: UISearchResultsUpdating, UISearchBarDelegate {
         
         guard text.count >= 3 else {
             return
+            // fix search
         }
         
         guard text != currentQuery else {
