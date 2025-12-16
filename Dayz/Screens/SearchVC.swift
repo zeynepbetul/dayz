@@ -22,6 +22,7 @@ class SearchVC: UIViewController {
     private var lastDocument: DocumentSnapshot?
     private var isLoading = false
     private var currentQuery: String = ""
+    private var emptyStateView: DZEmptyStateView?
     
     struct Cells {
         static let searchCell = "SearchCell"
@@ -97,6 +98,14 @@ class SearchVC: UIViewController {
 
                 switch result {
                 case .success(let (users, lastDoc)):
+                    self.emptyStateView?.removeFromSuperview()
+                    self.emptyStateView = nil
+                    
+                    if users.isEmpty {
+                        self.showEmptyStateView(with: "No users found", in: self.view)
+                        return
+                    }
+                    
                     self.lastDocument = lastDoc
                     self.updateData(users: users, animate: false)
 
