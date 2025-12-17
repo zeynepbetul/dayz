@@ -78,7 +78,7 @@ class DZUserInfoHeaderVC: UIViewController {
             followButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             followButton.heightAnchor.constraint(equalToConstant: 44),
             
-            bioLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: textImagePadding),
+            bioLabel.topAnchor.constraint(equalTo: followButton.bottomAnchor, constant: textImagePadding),
             bioLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             bioLabel.heightAnchor.constraint(equalToConstant: 60)
