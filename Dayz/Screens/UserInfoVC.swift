@@ -17,12 +17,15 @@ class UserInfoVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureViewController()
+        layoutUI()
+        fetchUser()
+    }
+    
+    func configureViewController() {
         view.backgroundColor = .systemBackground
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissCV))
         navigationItem.rightBarButtonItem = doneButton
-        
-        layoutUI()
-        fetchUser()
     }
     
     func layoutUI() {
