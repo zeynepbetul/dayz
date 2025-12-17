@@ -10,7 +10,6 @@ import UIKit
 class DZUserInfoHeaderVC: UIViewController {
     
     let avatarImageView       = DZAvatarImageView(frame: .zero)
-    let usernameLabel         = DZTitleLabel(textAlignment: .center, fontSize: 25)
     let nameLabel             = DZTitleLabel(textAlignment: .center, fontSize: 16)
     let followersLabel        = DZTitleLabel(textAlignment: .center, fontSize: 16)
     let followingLabel        = DZTitleLabel(textAlignment: .center, fontSize: 16)
@@ -37,7 +36,6 @@ class DZUserInfoHeaderVC: UIViewController {
     
     func configureUIElements() {
         avatarImageView.setImage(from: user.avatarUrl)
-        usernameLabel.text       = user.username
         nameLabel.text           = user.name ?? ""
         followersLabel.text      = "Followers: \(user.followers)"
         followingLabel.text      = "Follow: \(user.following)"
@@ -47,7 +45,6 @@ class DZUserInfoHeaderVC: UIViewController {
     
     func addSubviews() {
         view.addSubview(avatarImageView)
-        view.addSubview(usernameLabel)
         view.addSubview(nameLabel)
         view.addSubview(followersLabel)
         view.addSubview(followingLabel)

@@ -10,6 +10,7 @@ import UIKit
 class UserInfoVC: UIViewController {
 
     let headerView = UIView()
+    let usernameLabel = DZTitleLabel(textAlignment: .center, fontSize: 13)
     var userId: String!
     
     override func viewDidLoad() {
@@ -17,6 +18,7 @@ class UserInfoVC: UIViewController {
         view.backgroundColor = .systemBackground
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissCV))
         navigationItem.rightBarButtonItem = doneButton
+        view.addSubview(usernameLabel)
         
         layoutUI()
         fetchUser()
@@ -53,6 +55,8 @@ class UserInfoVC: UIViewController {
             switch result {
             case .success(let user):
                 DispatchQueue.main.async {
+                    self.usernameLabel.text = user.username
+                    self.navigationItem.titleView = self.usernameLabel
                     self.add(childVC: DZUserInfoHeaderVC(user: user), to: self.headerView)
                 }
             case .failure(let error):
