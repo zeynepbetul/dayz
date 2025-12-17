@@ -28,7 +28,13 @@ class DZAvatarImageView: UIImageView {
     }
     
     // MARK: - Load Image from URL
-    func setImage(from urlString: String) {
+    func setImage(from urlString: String?) {
+        // 0. Nil or empty check
+        guard let urlString = urlString, !urlString.isEmpty else {
+            self.image = placeHolderImage
+            return
+        }
+        
         let cacheKey = NSString(string: urlString)
         
         // 1. Check if it exists in cache
