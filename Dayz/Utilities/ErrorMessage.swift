@@ -14,4 +14,5 @@ enum DZError: String, Error {
     case unknownError = "An unknown error occured."
     case userCreateError = "Error occured in creating user."
     case loadUsersError = "Error in loading users"
+    case userNotFound = "User not found"
 }

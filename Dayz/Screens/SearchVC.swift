@@ -34,7 +34,7 @@ class SearchVC: UIViewController {
         configureSearchController()
         configureTableView()
         configureDataSource()
-        createDismissKeyboardTapGesture()
+        //createDismissKeyboardTapGesture()
     }
     
     func configureDataSource() {
@@ -175,8 +175,9 @@ extension SearchVC: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
  
         guard let user = dataSource.itemIdentifier(for: indexPath) else { return }
-        
+        print(user)
         let destVC = UserInfoVC()
+        destVC.userId = user.id
         let navController = UINavigationController(rootViewController: destVC)
         present(navController, animated: true)
     }

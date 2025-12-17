@@ -114,4 +114,22 @@ class NetworkManager {
             completion(.success((users, snapshot?.documents.last)))
         }
     }
+    
+    func fetchPublicUser(userId: String, completion: @escaping (Result<PublicUser, DZError>) -> Void) {
+        
+        db.collection("publicUsers").document(userId).getDocument { snapshot, error in
+            if let _ = error {
+                completion(.failure(.networkError))
+                return
+            }
+            
+            guard let snapshot,
+                  let user = try? snapshot.data(as: PublicUser.self) else {
+                completion(.failure(.userNotFound))
+                return
+            }
+            
+            completion(.success(user))
+        }
+    }
 }
