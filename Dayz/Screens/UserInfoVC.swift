@@ -11,6 +11,9 @@ class UserInfoVC: UIViewController {
 
     let headerView = UIView()
     let calendarView = UIView()
+    
+    var itemViews: [UIView] = []
+    
     let usernameLabel = DZTitleLabel(textAlignment: .center, fontSize: 13)
     
     var userId: String!
@@ -29,24 +32,27 @@ class UserInfoVC: UIViewController {
     }
     
     func layoutUI() {
-        view.addSubview(headerView)
-        view.addSubview(calendarView)
-        view.addSubview(usernameLabel)
-        
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        calendarView.translatesAutoresizingMaskIntoConstraints = false
-        
         let padding: CGFloat = 20
+        
+        itemViews = [headerView, calendarView]
+        
+        for itemView in itemViews {
+            view.addSubview(itemView)
+            itemView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                itemView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+                itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            ])
+        }
+
+        view.addSubview(usernameLabel)
         
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 180),
             
             calendarView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
-            calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            calendarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             calendarView.heightAnchor.constraint(equalToConstant: 180)
         ])
     }

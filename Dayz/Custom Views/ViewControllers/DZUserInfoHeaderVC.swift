@@ -58,29 +58,29 @@ class DZUserInfoHeaderVC: UIViewController {
         
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
-            avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             avatarImageView.widthAnchor.constraint(equalToConstant: 90),
             avatarImageView.heightAnchor.constraint(equalToConstant: 90),
             
             nameLabel.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: textImagePadding),
-            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             nameLabel.heightAnchor.constraint(equalToConstant: 38),
             
             followersLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             followersLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: textImagePadding),
             
             followingLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
-            followingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            followingLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             followButton.centerYAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             followButton.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: textImagePadding),
-            followButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            followButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             followButton.heightAnchor.constraint(equalToConstant: 44),
             
             bioLabel.topAnchor.constraint(equalTo: followButton.bottomAnchor, constant: textImagePadding),
             bioLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
-            bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bioLabel.heightAnchor.constraint(equalToConstant: 60)
 
         ])
