@@ -34,7 +34,6 @@ class SearchVC: UIViewController {
         configureSearchController()
         configureTableView()
         configureDataSource()
-        //createDismissKeyboardTapGesture()
     }
     
     func configureDataSource() {
@@ -51,11 +50,6 @@ class SearchVC: UIViewController {
         snapshot.appendItems(users)
         dataSource.apply(snapshot, animatingDifferences: animate)
     }
-    
-    func createDismissKeyboardTapGesture() {
-            let recognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
-            view.addGestureRecognizer(recognizer)
-        }
 
     func searchUsers(query: String) {
         /* used self. self in this case is our SearchVC.
@@ -143,6 +137,7 @@ class SearchVC: UIViewController {
 
         tableView.delegate = self
         tableView.rowHeight = 50
+        tableView.keyboardDismissMode = .onDrag
         
         tableView.register(SearchCell.self, forCellReuseIdentifier: Cells.searchCell)
         
