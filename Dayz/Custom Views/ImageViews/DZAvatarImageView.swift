@@ -9,7 +9,7 @@ import UIKit
 
 class DZAvatarImageView: UIImageView {
     
-    let placeHolderImage = UIImage(systemName: "person.circle")
+    let placeHolderImage = UIImage(systemName: SFSymbols.emptyProfile)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +25,7 @@ class DZAvatarImageView: UIImageView {
         layer.cornerRadius = 10
         clipsToBounds      = true // image would still look like a sharp square unless we did the clipsToBounds true
         image              = placeHolderImage
+        tintColor          = .secondaryLabel
     }
     
     // MARK: - Load Image from URL
