@@ -11,7 +11,7 @@ class UserInfoVC: UIViewController {
 
     let headerView = UIView()
     let calendarView = UIView()
-    let publicCalendarLabel = DZTitleLabel(textAlignment: .center, fontSize: 16)
+    let usernameLabel = DZTitleLabel(textAlignment: .center, fontSize: 13)
     
     var userId: String!
     
@@ -28,7 +28,7 @@ class UserInfoVC: UIViewController {
     func layoutUI() {
         view.addSubview(headerView)
         view.addSubview(calendarView)
-        view.addSubview(publicCalendarLabel)
+        view.addSubview(usernameLabel)
         
         headerView.translatesAutoresizingMaskIntoConstraints = false
         calendarView.translatesAutoresizingMaskIntoConstraints = false
