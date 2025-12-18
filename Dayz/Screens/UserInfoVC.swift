@@ -50,7 +50,7 @@ class UserInfoVC: UIViewController {
         
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 180),
+            headerView.heightAnchor.constraint(equalToConstant: 200),
             
             calendarView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
             calendarView.heightAnchor.constraint(equalToConstant: 180)
@@ -77,7 +77,9 @@ class UserInfoVC: UIViewController {
                 DispatchQueue.main.async {
                     self.usernameLabel.text = user.username
                     self.navigationItem.titleView = self.usernameLabel
+                    
                     self.add(childVC: DZUserInfoHeaderVC(user: user), to: self.headerView)
+                    self.add(childVC: DZCalendarTicketVC(user: user), to: self.calendarView)
                 }
             case .failure(let error):
                 self.presentDZAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Ok", buttonTitleSec: nil)
