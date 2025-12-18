@@ -11,7 +11,7 @@ class UserInfoVC: UIViewController {
 
     let headerView = UIView()
     let calendarView = UIView()
-    
+    let calendarTitleLabel = DZTitleLabel(textAlignment: .center, fontSize: 14)
     var itemViews: [UIView] = []
     
     let usernameLabel = DZTitleLabel(textAlignment: .center, fontSize: 13)
@@ -34,7 +34,7 @@ class UserInfoVC: UIViewController {
     func layoutUI() {
         let padding: CGFloat = 20
         
-        itemViews = [headerView, calendarView]
+        itemViews = [headerView, calendarTitleLabel, calendarView]
         
         for itemView in itemViews {
             view.addSubview(itemView)
@@ -47,12 +47,16 @@ class UserInfoVC: UIViewController {
         }
 
         view.addSubview(usernameLabel)
+        self.calendarTitleLabel.text = "Public Calendar"
         
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 200),
             
-            calendarView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
+            calendarTitleLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
+            calendarTitleLabel.heightAnchor.constraint(equalToConstant: 18),
+            
+            calendarView.topAnchor.constraint(equalTo: calendarTitleLabel.bottomAnchor, constant: padding),
             calendarView.heightAnchor.constraint(equalToConstant: 180)
         ])
     }
