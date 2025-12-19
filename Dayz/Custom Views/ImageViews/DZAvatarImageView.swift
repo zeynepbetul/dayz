@@ -26,6 +26,7 @@ class DZAvatarImageView: UIImageView {
         clipsToBounds      = true // image would still look like a sharp square unless we did the clipsToBounds true
         image              = placeHolderImage
         tintColor          = .secondaryLabel
+        contentMode        = .scaleAspectFill
     }
     
     // MARK: - Load Image from URL
