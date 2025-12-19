@@ -10,7 +10,7 @@ import UIKit
 class DZCalendarTicketVC: UIViewController {
     
     let titleLabel = DZTitleLabel(textAlignment: .center, fontSize: 13)
-    let bodyLabel  = DZBodyLabel(textAlignment: .center)
+    let bodyLabel  = DZSecondaryTitleLabel(textAlignment: .left, fontSize: 13)
     let image      = DZAvatarImageView(frame: .zero)
     let button     = DZButton(backgroundColor: .black, title: "Open")
     
@@ -34,7 +34,8 @@ class DZCalendarTicketVC: UIViewController {
     
     private func configureUIElements() {
         titleLabel.text = "John's calendar"
-        bodyLabel.text = "This calendar is John's everyday"
+        bodyLabel.text = "This calendar is John's everyday. John adds what he did everyday."
+        bodyLabel.numberOfLines = 0
     }
     
     private func configureBackgroundView() {
@@ -48,29 +49,29 @@ class DZCalendarTicketVC: UIViewController {
         view.addSubview(image)
         view.addSubview(button)
         
-        image.image = UIImage(systemName: SFSymbols.emptyProfile)
+        image.image = UIImage(named: "uploaded_image")
         let padding: CGFloat = 10
         
         NSLayoutConstraint.activate([
-            image.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
+            image.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             image.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             image.widthAnchor.constraint(equalToConstant: 90),
-            image.heightAnchor.constraint(equalToConstant: 110),
+            image.heightAnchor.constraint(equalToConstant: 150),
             
             titleLabel.topAnchor.constraint(equalTo: image.topAnchor, constant: padding),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            titleLabel.trailingAnchor.constraint(equalTo: image.trailingAnchor, constant: -padding),
+            titleLabel.trailingAnchor.constraint(equalTo: image.leadingAnchor, constant: -padding),
             titleLabel.heightAnchor.constraint(equalToConstant: 17),
             
-            bodyLabel.centerYAnchor.constraint(equalTo: image.centerYAnchor),
+            bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            bodyLabel.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -8),
             bodyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            bodyLabel.trailingAnchor.constraint(equalTo: image.trailingAnchor, constant: -padding),
-            bodyLabel.heightAnchor.constraint(equalToConstant: 25),
+            bodyLabel.trailingAnchor.constraint(equalTo: image.leadingAnchor, constant: -padding),
             
             button.bottomAnchor.constraint(equalTo: image.bottomAnchor),
             button.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
-            button.widthAnchor.constraint(equalToConstant: 55),
-            button.heightAnchor.constraint(equalToConstant: 44)
+            button.widthAnchor.constraint(equalToConstant: 130),
+            button.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }
