@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 // extensions must not contain stored properties.
 // fileprivate is, anything in this file can use this variable.
@@ -20,6 +21,12 @@ extension UIViewController {
             alertVC.modalTransitionStyle = .crossDissolve
             self.present(alertVC, animated: true)
         }
+    }
+    
+    func presentSafariVC(with url: URL) {
+        let safariVC = SFSafariViewController(url: url)
+        safariVC.preferredControlTintColor = .systemGray6
+        present(safariVC, animated: true)
     }
    
     func showLoadingView() {
