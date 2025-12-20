@@ -15,4 +15,5 @@ enum DZError: String, Error {
     case userCreateError = "Error occured in creating user."
     case loadUsersError = "Error in loading users"
     case userNotFound = "User not found"
+    case unableToFavorite = "Unable to favorite"
 }
