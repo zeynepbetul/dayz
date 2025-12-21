@@ -9,7 +9,8 @@ import UIKit
 
 class DZIntervalContainerVC: UIViewController {
     
-    let interval             = DZTitleLabel(textAlignment: .center, fontSize: 11)
+    let intervalLabel         = DZTitleLabel(textAlignment: .center, fontSize: 11)
+    let activityName          = DZTitleLabel(textAlignment: .center, fontSize: 12)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,19 +25,26 @@ class DZIntervalContainerVC: UIViewController {
     }
     
     private func layoutUI() {
-        view.addSubview(interval)
+        view.addSubview(intervalLabel)
+        view.addSubview(activityName)
         
         let padding: CGFloat = 10
         
         NSLayoutConstraint.activate([
-            interval.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
-            interval.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            interval.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            interval.heightAnchor.constraint(equalToConstant: 15),
+            intervalLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
+            intervalLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            intervalLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            intervalLabel.heightAnchor.constraint(equalToConstant: 14),
+            
+            activityName.topAnchor.constraint(equalTo: intervalLabel.bottomAnchor, constant: padding/2),
+            activityName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            activityName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            activityName.heightAnchor.constraint(equalToConstant: 15)
         ])
     }
     
     private func configureUIElements() {
-        interval.text = "06:00-12:00"
+        intervalLabel.text = "06:00-12:00"
+        activityName.text  = "Activity Name"
     }
 }
