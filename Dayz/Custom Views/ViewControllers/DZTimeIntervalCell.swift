@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DZIntervalContainerVC: UIViewController {
+class DZTimeIntervalCell: UIViewController {
     
     let intervalLabel         = DZTitleLabel(textAlignment: .center, fontSize: 11)
     let activityName          = DZTitleLabel(textAlignment: .center, fontSize: 12)

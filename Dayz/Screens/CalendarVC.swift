@@ -7,66 +7,81 @@
 
 import UIKit
 
-class CalendarVC: UIViewController {
+final class CalendarVC: UIViewController {
     
     let tableView = UITableView()
     
-    let containerFirst         = UIView()
-    let containerSecond        = UIView()
-    let containerThird         = UIView()
-    let containerFourth        = UIView()
-    var itemViews: [UIView] = []
-
+    let intervals: [(start: Int, end: Int)] = [
+        (6, 12),
+        (12, 13),
+        (18, 24),
+        (0, 6)
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViewController()
-        layoutUI()
-        fetchDay()
+        configureTableView()
     }
     
     func configureViewController() {
         view.backgroundColor = .systemBackground
     }
     
-    func layoutUI() {
-        let padding: CGFloat = 20
-        
-        itemViews = [containerFirst, containerSecond, containerThird, containerFourth]
-        
-        for itemView in itemViews {
-            view.addSubview(itemView)
-            itemView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                itemView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-                itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            ])
-        }
+    private func configureTableView() {
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            containerFirst.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerFirst.heightAnchor.constraint(equalToConstant: 200),
-            
-            containerSecond.topAnchor.constraint(equalTo: containerFirst.bottomAnchor, constant: padding),
-            containerSecond.heightAnchor.constraint(equalToConstant: 200),
-            
-            containerThird.topAnchor.constraint(equalTo: containerSecond.bottomAnchor, constant: padding),
-            containerThird.heightAnchor.constraint(equalToConstant: 200),
-            
-            containerFourth.topAnchor.constraint(equalTo: containerThird.bottomAnchor, constant: padding),
-            containerFourth.heightAnchor.constraint(equalToConstant: 200)
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        
+        tableView.register(DZTimeIntervalCell.self, forCellReuseIdentifier: DZTimeIntervalCell.reuseID)
+    }
+}
+
+extension CalendarVC: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+        let interval = intervals[indexPath.row]
+
+        let intervalMinutes = (interval.end - interval.start) * 60
+
+        let minCellHeight: CGFloat = 44
+        let maxCellHeight: CGFloat = UIScreen.main.bounds.height * 0.22
+
+        let maxIntervalMinutes: CGFloat = 6 * 60
+
+        let ratio = CGFloat(intervalMinutes) / maxIntervalMinutes
+
+        let calculatedHeight =
+            minCellHeight + ratio * (maxCellHeight - minCellHeight)
+
+        return round(calculatedHeight)
+    }
+}
+
+extension CalendarVC: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        intervals.count
     }
     
-    func add(childVC: UIViewController, to containerView: UIView) {
-        addChild(childVC)
-        containerView.addSubview(childVC.view)
-        childVC.view.frame = containerView.bounds
-        childVC.didMove(toParent: self)
-    }
-    
-    func fetchDay() {
-        self.add(childVC: DZIntervalContainerVC(), to: self.containerFirst)
-        self.add(childVC: DZIntervalContainerVC(), to: self.containerSecond)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: DZTimeIntervalCell.reuseID, for: indexPath) as! DZTimeIntervalCell
+        
+        let interval = intervals[indexPath.row]
+        
+        cell.configure(startHour: interval.start, endHour: interval.end, activityName: nil)
+        return cell
     }
 }
